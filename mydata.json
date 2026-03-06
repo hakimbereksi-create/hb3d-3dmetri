@@ -1,8 +1,3 @@
-{
-"printers": [
-{
-"name": "X1C Carbon",
-"price": 0.15
-}
-]
-}
+{"printers":[{"name":"X1C Carbon","price":0.15}]}
+
+
