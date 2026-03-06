@@ -1,15 +1,9 @@
-
+```json
 {
-  "materials": [
-    {
-      "name": "PLA Standard",
-      "density": 1.24,
-      "price": 20
-    }
-  ],
   "printers": [
     {
-      "name": "Bambu Lab X1C Carbon",
-      "volumePrice": 0.15,
-      "maxDimensions": 
+      "name": "X1C Carbon",
+      "price": 0.15
     }
+  ]
+}
