@@ -1,57 +1,19 @@
+GitHub racine → Remplacer data.json :
 [
   {
     "id":1,
     "label":"BambuLab X1C HB3D Lille",
-    "technology":"Material Extrusion",
-    "materials":[
-      {
-        "id":1,
-        "label":"PLA Standard",
-        "material_type":"PLA",
-        "pricepercm3":0.15,
-        "description":"PLA pour BambuLab X1C HB3D Lille",
-        "colors":[{"id":1,"label":"Black","rgb":"rgb(0,0,0)"}],
-        "infills":[{"id":3,"label":"Strong","percentage":"%50","multiplier":1.5}],
-        "layer_heights":[{"id":1,"label":"Normal","layerHeight":"200 micron","multiplier":1.1}],
-        "finishings":[{"id":1,"label":"None","price":0}],
-        "setup_costs":[{"id":1,"label":"X1C Setup","price":20}]
-      }
-    ]
-  },
-  {
-    "id":2,
-    "label":"Anycubic Kobra S1 HB3D",
-    "technology":"Material Extrusion",
-    "materials":[
-      {
-        "id":2,
-        "label":"PETG Flexible", 
-        "material_type":"PETG",
-        "pricepercm3":0.18,
-        "colors":[{"id":2,"label":"Black","rgb":"rgb(0,0,0)"}],
-        "infills":[{"id":3,"label":"Strong","percentage":"%50","multiplier":1.5}],
-        "layer_heights":[{"id":1,"label":"Normal","layerHeight":"200 micron","multiplier":1.1}],
-        "finishings":[{"id":1,"label":"None","price":0}],
-        "setup_costs":[{"id":1,"label":"Kobra Setup","price":15}]
-      }
-    ]
-  },
-  {
-    "id":3,
-    "label":"Formlabs Form3 HB3D Lille",
-    "technology":"Vat Photopolymerization",
-    "materials":[
-      {
-        "id":3,
-        "label":"Résine SLA",
-        "material_type":"Resin",
-        "pricepercm3":0.45,
-        "colors":[{"id":3,"label":"Clear","rgb":"rgb(221,213,207)"}],
-        "infills":[{"id":3,"label":"Strong","percentage":"%50","multiplier":1.5}],
-        "layer_heights":[{"id":1,"label":"Normal","layerHeight":"100 micron","multiplier":1.2}],
-        "finishings":[{"id":1,"label":"None","price":0}],
-        "setup_costs":[{"id":1,"label":"Form3 Setup","price":25}]
-      }
-    ]
+    "technology":"Material Extrusion", 
+    "materials":[{
+      "id":1,
+      "label":"PLA Standard",
+      "material_type":"PLA",
+      "pricepercm3":0.15,
+      "colors":[{ "id":1,"label":"Black","rgb":"rgb(0,0,0)" }],
+      "infills":[{ "id":3,"label":"Strong","percentage":"%50","multiplier":1.5 }],
+      "layer_heights":[{ "id":1,"label":"Normal","layerHeight":"200 micron","multiplier":1.1 }],
+      "finishings":[{ "id":1,"label":"None","price":0 }],
+      "setup_costs":[{ "id":1,"label":"X1C Setup","price":20 }]
+    }]
   }
 ]
