@@ -1,0 +1,6 @@
+{
+  "printers": {
+    "FDM": ["BambuLab X1C HB3D Lille", "Anycubic Kobra S1 HB3D"],
+    "SLA": ["Formlabs Form3 HB3D Lille"]
+  }
+}
