@@ -2,6 +2,7 @@
   {
     "id":1,
     "label":"BambuLab X1C HB3D Lille",
+    "technologies": ["FDM"],
     "technology":"Material Extrusion",
     "currency": "EUR",
     "exchange_rate": 0.86,
@@ -21,6 +22,11 @@
         "finishings":[{ "id":1,"label":"None","price":0 }],
         "setup_costs":[{ "id":1,"label":"X1C Setup","price":20 }]
       }
-    ]
+    ],
+    "payment": {
+      "paypal": "hakim@hb3d.fr",
+      "stripe": "pk_test_..."
+    },
+    "email": "hakim@hb3d.fr"
   }
 ]
