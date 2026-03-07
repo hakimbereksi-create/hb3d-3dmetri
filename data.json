@@ -1,6 +1,16 @@
 {
+  "materials": [
+    {"id":1,"name":"PLA Standard","density":1.24,"price_per_cm3":0.15},
+    {"id":2,"name":"PETG Flexible","density":1.27,"price_per_cm3":0.20},
+    {"id":3,"name":"Résine SLA","density":1.10,"price_per_cm3":0.45}
+  ],
   "printers": {
-    "FDM": ["BambuLab X1C HB3D Lille", "Anycubic Kobra S1 HB3D"],
-    "SLA": ["Formlabs Form3 HB3D Lille"]
+    "FDM": [
+      {"id":1,"name":"BambuLab X1C HB3D Lille","price_per_cm3":0.15},
+      {"id":2,"name":"Anycubic Kobra S1 HB3D","price_per_cm3":0.18}
+    ],
+    "SLA": [
+      {"id":3,"name":"Formlabs Form3 HB3D Lille","price_per_cm3":0.45}
+    ]
   }
 }
