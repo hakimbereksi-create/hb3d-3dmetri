@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
- 
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>HB3D Devis 3D Lille - Impression 3D Express</title>
@@ -11,12 +9,12 @@
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       max-width: 1200px; margin: 0 auto; padding: 20px; 
-      background: white;    /* FOND BLANC au lieu du violet */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
     }
     h1 { 
-      text-align: center; color: #212529; margin-bottom: 30px; 
-      font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      text-align: center; color: white; margin-bottom: 30px; 
+      font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     .widget-container { 
       background: white; border-radius: 20px; 
@@ -34,7 +32,6 @@
     #hb3d-form input, #hb3d-form textarea { 
       width: 100%; padding: 15px; margin-bottom: 15px; 
       border: none; border-radius: 10px; font-size: 16px;
-      background: #f8f9fa;
     }
     #hb3d-form button { 
       background: #ffc107; color: #212529; border: none; 
@@ -45,16 +42,9 @@
     #hb3d-form button:hover { 
       transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,193,7,0.4);
     }
-    .loading { text-align: center; padding: 40px; color: #212529; font-size: 1.2em; }
+    .loading { text-align: center; padding: 40px; color: white; font-size: 1.2em; }
   </style>
 </head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-  [class*="arrow"], .v-select .vs__dropdown-toggle, select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
-  }
-</style>
-
 <body>
 
 
@@ -67,7 +57,7 @@
     <form id="hb3d-form">
       <input type="email" id="clientEmail" name="clientEmail" placeholder="📧 Email *" required>
       <input type="tel" id="clientTel" placeholder="📱 Téléphone">
-      <textarea id="clientAdresse" name="clientAdresse" placeholder="📦 Adresse livraison Lille *" required></textarea>
+      <textarea id="clientAdresse" name="clientAdresse"placeholder="📦 Adresse livraison Lille *" required></textarea>
       <input type="file" id="stlFile" name="stlFile" accept=".stl" required>
       <button type="submit">✅ Commander €268 PayPal</button>
     </form>
@@ -83,7 +73,7 @@
     }
 
     // EmailJS - REMPLACE TES IDs
-    emailjs.init("DCpEyOckFUUHGxM_O"); 
+emailjs.init("DCpEyOckFUUHGxM_O"); 
     
     // 3DMetri → EmailJS automatique
     window.addEventListener('message', function(event) {
@@ -105,10 +95,10 @@
           alert('❌ Erreur : ' + JSON.stringify(error));
         });
     });
- 
+  </script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 </body>
 </html>
-
 
 
      }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script></body></html>
