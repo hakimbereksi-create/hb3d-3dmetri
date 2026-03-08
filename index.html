@@ -62,7 +62,48 @@ h1 {
       transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,193,7,0.4);
     }
     .loading { text-align: center; padding: 40px; color: white; font-size: 1.2em; }
-  </style>
+  #app * .vs__dropdown-toggle-arrow:after {
+  content: "▼" !important;
+  font-size: 8px !important;
+  color: #666 !important;
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+ transform: translateY(-50%) !important;
+}
+div[id*="3dmetri"] .vs__dropdown-toggle-arrow,
+#app .vs__dropdown-toggle-arrow { 
+  display: none !important; 
+}
+
+/* FLÈCHES SVG 3DMetri - SOLUTION DÉFINITIVE */
+#app [class*="vs__dropdown-toggle"]::after {
+  content: ''; 
+  width: 8px; 
+  height: 5px; 
+  position: absolute; 
+  right: 12px; 
+  top: 50%; 
+  transform: translateY(-50%) rotate(0deg) !important; 
+  pointer-events: none; 
+  background: linear-gradient(to bottom right, transparent 45%, #666 50%, transparent 55%);
+  transition: transform 0.2s ease;
+  z-index: 10;
+}
+#app [class*="vs__dropdown-toggle"][aria-expanded="true"]::after,
+#app [class*="vs__dropdown-toggle"]:hover::after {
+  transform: translateY(-50%) rotate(180deg) !important;
+}
+
+/* Garde ton SVG existant mais nettoyé */
+div[id*="3dmetri"] .vs__selected,
+#app .vs__selected { 
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMUw2IDZMMTIgMSIgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 8px center !important;
+  padding-right: 32px !important;
+}
+
 </head>
 <body>
  
