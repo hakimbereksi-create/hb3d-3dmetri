@@ -1,102 +1,13 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>HB3D Devis 3D Lille - Impression 3D Express</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      max-width: 1200px; margin: 0 auto; padding: 20px; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-    }
-    h1 { 
-      text-align: center; color: white; margin-bottom: 30px; 
-      font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-    .widget-container { 
-      background: white; border-radius: 20px; 
-      padding: 30px; margin-bottom: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-    .emailjs-box { 
-      background: #28a745; color: white; border-radius: 20px; 
-      padding: 30px; text-align: center; box-shadow: 0 20px 40px rgba(40,167,69,0.3);
-    }
-    .emailjs-box h2 { color: white; margin-bottom: 20px; font-size: 2em; }
-    .emailjs-box p { margin-bottom: 15px; font-size: 1.2em; }
-    #hb3d-form { 
-      max-width: 500px; margin: 0 auto; 
-    }
-    #hb3d-form input, #hb3d-form textarea { 
-      width: 100%; padding: 15px; margin-bottom: 15px; 
-      border: none; border-radius: 10px; font-size: 16px;
-    }
-    #hb3d-form button { 
-      background: #ffc107; color: #212529; border: none; 
-      padding: 18px 40px; font-size: 1.3em; font-weight: bold;
-      border-radius: 50px; cursor: pointer; transition: all 0.3s;
-      width: 100%;
-    }
-    #hb3d-form button:hover { 
-      transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,193,7,0.4);
-    }
-    .loading { text-align: center; padding: 40px; color: white; font-size: 1.2em; }
-  </style>
-</head>
-<body>
-
-  <!-- EMAILJS Formulaire (Remplace Jotform) -->
-  <div class="emailjs-box" id="emailjs-section" style="display:none;">
-    <h2>✅ Devis prêt ! €268</h2>
-    <p>Holster Vz61: <strong>105860 mm³</strong></p>
-    <p><strong>X1C Lille + PLA Black 50%</strong></p>
-    
-    <form id="hb3d-form">
-      <input type="email" id="clientEmail" name="clientEmail" placeholder="📧 Email *" required>
-      <input type="tel" id="clientTel" placeholder="📱 Téléphone">
-      <textarea id="clientAdresse" name="clientAdresse"placeholder="📦 Adresse livraison Lille *" required></textarea>
-      <input type="file" id="stlFile" name="stlFile" accept=".stl" required>
-      <button type="submit">✅ Commander €268 PayPal</button>
-    </form>
-  </div>
-
-  <script>
-    // Config 3DMetri
-    window.Metri_Config = {
-      VUE_APP_BASE_SES_LAMBDA_URL: 'https://4bnosx427q7rmgwklsekx2jeke0tfyob.lambda-url.us-east-1.on.aws',
-      VUE_APP_BASE_GET_SIGNED_URL: 'https://gipeovznovgqn54pt2v6ght36a0tlxzq.lambda-url.us-east-1.on.aws',
-      VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL: 'https://qi6xp5ajlaim7ic2dbjvuib63i0ktezz.lambda-url.us-east-1.on.aws',
-      LANG: "fr"
-    }
-
-    // EmailJS - REMPLACE TES IDs
-emailjs.init("DCpEyOckFUUHGxM_O"); 
-    
-    // 3DMetri → EmailJS automatique
-    window.addEventListener('message', function(event) {
-      if (event.data.type === 'METRI_CALCULATION_DONE') {
-        document.getElementById('emailjs-section').style.display = 'block';
-        document.querySelector('.widget-container').style.display = 'none';
-      }
-    });
-
-    // EmailJS Submit
-    document.getElementById('hb3d-form').addEventListener('submit', function(e) {
-      e.preventDefault();
+<!DOCTYPE html><html lang=en><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=google-site-verification content=UxbAvcqBKwPozs-oQcJxchljd90wfAGkdWn3WQG7Xwg><meta name=viewport content="width=device-width,initial-scale=1"><link rel=icon href=/favicon.ico><link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel=stylesheet><title>3DMetri</title><script>window.Metri_Config = {
+       //Fillup these data with your company details 
+      //VUE_APP_BASE_SES_LAMBDA_URL:'*YOUR AWS LAMBDA FUNCTION URL HERE*',
+      //VUE_APP_BASE_GET_SIGNED_URL:'*YOUR AWS LAMBDA FUNCTION URL HERE*',
+      //VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL:'*YOUR AWS LAMBDA FUNCTION URL HERE*',
       
-      emailjs.sendForm('service_np51rgo', 'template_7mjwzt9', this)
-        .then(function() {
-          alert('✅ Commande envoyée ! PayPal dans 5min → X1C Lille');
-          this.reset();
-        }, function(error) {
-          alert('❌ Erreur : ' + JSON.stringify(error));
-        });
-    });
-  </script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-</body>
-</html>
-
-     }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script></body></html>
+      VUE_APP_BASE_SES_LAMBDA_URL:'https://4bnosx427q7rmgwklsekx2jeke0tfyob.lambda-url.us-east-1.on.aws',
+      VUE_APP_BASE_GET_SIGNED_URL:'https://gipeovznovgqn54pt2v6ght36a0tlxzq.lambda-url.us-east-1.on.aws',
+      VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL:'https://qi6xp5ajlaim7ic2dbjvuib63i0ktezz.lambda-url.us-east-1.on.aws',
+      
+      LANG: "en"
+      
+      }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script></body></html>
