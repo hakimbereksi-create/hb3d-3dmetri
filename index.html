@@ -15,35 +15,42 @@
       LANG: "en"
       
       }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script>
-<!-- EMAILJS 3DMetri FINAL -->
+<!-- EMAILJS 3DMetri - TES IDs -->
 <script>
+const PUBLIC_KEY = "DCpEyOckFUUHGxM_Os";
+const SERVICE_ID = "service_np51rgo";
+const TEMPLATE_ID = "template_7mjwzt9";
+
+emailjs.init({ publicKey: PUBLIC_KEY });
+
 setTimeout(() => {
   document.addEventListener('click', async (e) => {
-    if(e.target.matches('button[type="submit"], .checkout, .btn-checkout, .send')){
+    if(e.target.matches('button[type="submit"], .checkout, .btn, input[type="submit"]')){
       e.preventDefault();
       
       const total = document.querySelector('.total, [class*="total"]')?.textContent?.trim() || '$15.13';
       const printer = Array.from(document.querySelectorAll('select'))
         ?.find(s => s.innerHTML.includes('Bambu'))?.selectedOptions[0]?.text || 'BambuLab X1C';
-      const material = Array.from(document.querySelectorAll('select option:checked'))
-        ?.find(opt => opt.text.includes('PLA') || opt.text.includes('ABS'))?.text || 'PLA Noir';
+      
+      console.log('📤 ENVOI:', {printer, total});
       
       try {
-        await emailjs.send('service_3dmetri', 'template_quote', {
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
           from_name: 'Hakim HB3D Lille',
           to_email: 'hakim@hb3d.fr',
           printer: printer,
-          material: material,
+          material: 'PLA Noir',
           total: total,
-          message: `Devis 3DMetri: ${printer} / ${material} / ${total}`
+          message: `Devis 3DMetri: ${printer} - ${total}`
         });
         alert('✅ Devis envoyé à hakim@hb3d.fr !');
       } catch(e) {
-        console.error('EmailJS:', e.status, e.text);
-        alert('❌ EmailJS: vérifie tes keys service/template');
+        console.error('EmailJS erreur:', e);
+        alert('❌ Erreur envoi - Console F12');
       }
     }
   });
 }, 3000);
 </script>
 </body>
+
