@@ -4,35 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>HB3D Devis 3D Lille - Impression 3D Express</title>
-<style>
+  <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       max-width: 1200px; margin: 0 auto; padding: 20px; 
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
- min-height: 100vh;
-    }      
-select { 
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
-  appearance: none;
-  background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMUw2IDZMMTIgMSIgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==") no-repeat right 10px center;
-  background-size: 12px; 
-  padding-right: 30px;
-} 
-.v-select .vs__dropdown-toggle-arrow {
-  display: none !important;
-}
-.v-select .vs__selected {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDEyIDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMUw2IDZMMTIgMSIgc3Ryb2tlPSIjOTk5IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==") !important;
-  background-repeat: no-repeat !important;
-  background-position: right 10px center !important;
-  padding-right: 35px !important;
-}  
-
-h1 { 
-      text-align: center; color: white; margin-bottom: 30px;
- 
+      min-height: 100vh;
+    }
+    h1 { 
+      text-align: center; color: white; margin-bottom: 30px; 
       font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
     .widget-container { 
@@ -62,48 +43,10 @@ h1 {
       transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255,193,7,0.4);
     }
     .loading { text-align: center; padding: 40px; color: white; font-size: 1.2em; }
-  #app * .vs__dropdown-toggle-arrow:after {
-  content: "▼" !important;
-  font-size: 8px !important;
-  color: #666 !important;
-  position: absolute !important;
-  right: 10px !important;
-  top: 50% !important;
- transform: translateY(-50%) !important;
-}
-div[id*="3dmetri"] .vs__dropdown-toggle-arrow,
-#app .vs__dropdown-toggle-arrow { 
-  display: none !important; 
-}
-
-/* FLÈCHES SVG 3DMetri - VERSION SÉCURISÉE */
-div[id*="3dmetri"] .vs__dropdown-toggle::after,
-#app .vs__dropdown-toggle::after {
-  content: '';
-  width: 0; 
-  height: 0; 
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 5px solid #666;
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  transition: transform 0.2s ease;
-}
-div[id*="3dmetri"] .vs__dropdown-toggle[aria-expanded="true"]::after,
-#app .vs__dropdown-toggle:hover::after {
-  transform: translateY(-50%) rotate(180deg);
-}
-div[id*="3dmetri"] .vs__dropdown-toggle-arrow {
-  display: none !important;
-}
-
-
+  </style>
 </head>
 <body>
- 
+
   <!-- EMAILJS Formulaire (Remplace Jotform) -->
   <div class="emailjs-box" id="emailjs-section" style="display:none;">
     <h2>✅ Devis prêt ! €268</h2>
