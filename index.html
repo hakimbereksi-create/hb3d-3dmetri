@@ -15,34 +15,35 @@
       LANG: "en"
       
       }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script>
-<!-- EMAILJS 3DMetri - ZÉRO conflit -->
+<!-- EMAILJS 3DMetri FINAL -->
 <script>
 setTimeout(() => {
-  // Capture panier après rendu 3D
   document.addEventListener('click', async (e) => {
-    if(e.target.matches('button[type="submit"], .checkout, .send')){
+    if(e.target.matches('button[type="submit"], .checkout, .btn-checkout, .send')){
       e.preventDefault();
       
-      // Récup données INTERFACE (fonctionne SANS Supabase)
-      const total = document.querySelector('.total, [class*="total"]')?.textContent || '$15.13';
-      const printerSel = Array.from(document.querySelectorAll('select'))
-        .find(s => s.innerHTML.includes('Bambu'))?.selectedOptions[0]?.text || 'BambuLab X1C';
+      const total = document.querySelector('.total, [class*="total"]')?.textContent?.trim() || '$15.13';
+      const printer = Array.from(document.querySelectorAll('select'))
+        ?.find(s => s.innerHTML.includes('Bambu'))?.selectedOptions[0]?.text || 'BambuLab X1C';
+      const material = Array.from(document.querySelectorAll('select option:checked'))
+        ?.find(opt => opt.text.includes('PLA') || opt.text.includes('ABS'))?.text || 'PLA Noir';
       
       try {
         await emailjs.send('service_3dmetri', 'template_quote', {
           from_name: 'Hakim HB3D Lille',
           to_email: 'hakim@hb3d.fr',
-          printer: printerSel,
+          printer: printer,
+          material: material,
           total: total,
-          message: `Devis 3D: ${printerSel} - ${total}`
+          message: `Devis 3DMetri: ${printer} / ${material} / ${total}`
         });
         alert('✅ Devis envoyé à hakim@hb3d.fr !');
       } catch(e) {
-        alert('❌ Vérifie EmailJS keys');
+        console.error('EmailJS:', e.status, e.text);
+        alert('❌ EmailJS: vérifie tes keys service/template');
       }
     }
   });
-}, 2000);
+}, 3000);
 </script>
 </body>
-</body></html>
