@@ -37,7 +37,7 @@ setTimeout(() => {
       try {
         await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
           from_name: 'Hakim HB3D Lille',
-          to_email: 'hakim@hb3d.fr',
+          to_email: 'hbereksi@hb3d.fr',
           printer: printer,
           material: 'PLA Noir',
           total: total,
@@ -62,7 +62,7 @@ window.sendMetriEmail = async function(orderData) {
     try {
         await emailjs.send("service_np51rgo", "template_7mjwzt9", {
             from_name: '3DMetri HB3D AUTO',
-            to_email: 'hakim@hb3d.fr',
+            to_email: 'hbereksi@hb3d.fr',
             printer: orderData.printer || 'BambuLab X1C',
             material: 'PLA Noir',
             total: (orderData.amount/100)+"€",
