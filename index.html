@@ -46,9 +46,14 @@
   </style>
 </head>
 <body>
+  <!-- 3DMetri Widget -->
+  <h1>🔥 HB3D Devis 3D Instantané Lille</h1>
+  <div class="widget-container">
+    <script src="https://demo.3dmetri.com/widget.js?v=2"></script>
+    <div id="3dmetri-widget"></div>
+  </div>
 
-
-  <!-- EMAILJS Formulaire (après calcul 3DMetri) -->
+  <!-- EMAILJS Formulaire (Remplace Jotform) -->
   <div class="emailjs-box" id="emailjs-section" style="display:none;">
     <h2>✅ Devis prêt ! €268</h2>
     <p>Holster Vz61: <strong>105860 mm³</strong></p>
@@ -57,17 +62,23 @@
     <form id="hb3d-form">
       <input type="email" id="clientEmail" name="clientEmail" placeholder="📧 Email *" required>
       <input type="tel" id="clientTel" placeholder="📱 Téléphone">
-      <textarea id="clientAdresse" name="clientAdresse" placeholder="📦 Adresse livraison Lille *" required></textarea>
+      <textarea id="clientAdresse" name="clientAdresse"placeholder="📦 Adresse livraison Lille *" required></textarea>
       <input type="file" id="stlFile" name="stlFile" accept=".stl" required>
       <button type="submit">✅ Commander €268 PayPal</button>
     </form>
   </div>
 
-  <!-- ✅ SCRIPTS CORRIGÉS (EmailJS + 3DMetri sync) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    // EmailJS v4 - User ID correct
-    emailjs.init("DCpEyOckFUUHGxM_O");
+    // Config 3DMetri
+    window.Metri_Config = {
+      VUE_APP_BASE_SES_LAMBDA_URL: 'https://4bnosx427q7rmgwklsekx2jeke0tfyob.lambda-url.us-east-1.on.aws',
+      VUE_APP_BASE_GET_SIGNED_URL: 'https://gipeovznovgqn54pt2v6ght36a0tlxzq.lambda-url.us-east-1.on.aws',
+      VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL: 'https://qi6xp5ajlaim7ic2dbjvuib63i0ktezz.lambda-url.us-east-1.on.aws',
+      LANG: "fr"
+    }
+
+    // EmailJS - REMPLACE TES IDs
+emailjs.init("DCpEyOckFUUHGxM_O"); 
     
     // 3DMetri → EmailJS automatique
     window.addEventListener('message', function(event) {
@@ -77,18 +88,11 @@
       }
     });
 
-    // EmailJS Submit - v4 compatible
+    // EmailJS Submit
     document.getElementById('hb3d-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const params = {
-        clientEmail: document.getElementById('clientEmail').value,
-        clientTel: document.getElementById('clientTel').value,
-        clientAdresse: document.getElementById('clientAdresse').value,
-        stlFile: document.getElementById('stlFile').files[0]?.name || 'Non uploadé'
-      };
-      
-      emailjs.send('service_np51rgo', 'template_7mjwzt9', params)
+      emailjs.sendForm('service_np51rgo', 'template_7mjwzt9', this)
         .then(function() {
           alert('✅ Commande envoyée ! PayPal dans 5min → X1C Lille');
           this.reset();
@@ -97,10 +101,9 @@
         });
     });
   </script>
-
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 </body>
 </html>
-
 
 
      }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script></body></html>
