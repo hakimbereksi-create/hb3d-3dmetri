@@ -21,9 +21,9 @@
         "layer_heights":[{ "id":1,"label":"Normal","layerHeight":"200 micron","multiplier":1.1 }],
         "finishings":[{ "id":1,"label":"None","price":0 }],
         "setup_costs":[{ "id":1,"label":"X1C Setup","price":20 }]
-      }
+      },
         {
-        "id":1,
+        "id":2,
         "label":"PLA Standard",
         "material_type":"PLA",
         "pricepercm3":0.15,
