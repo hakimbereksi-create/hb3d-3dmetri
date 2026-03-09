@@ -80,6 +80,15 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 <!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
 // INTERCEPTE console.log 3DMetri EN TEMPS RÉEL
+
+// === CALCUL EXCEL HB3D (AU DÉBUT) ===
+window.calculPrixHB3D = function(poids, tempsMin) {
+  const mat = poids * 0.02;
+  const mach = (tempsMin / 60) * 19.2;
+  const perte = (mat + mach) * 0.10;
+  return (mat + mach + perte).toFixed(2) + '€ HT';
+};
+
 const data = { client: '', stripe: '', file: '' };
 let processComplete = false;
 
@@ -116,9 +125,10 @@ console.log = (...args) => {
         client_id: data.client.replace('hbereksi@hb3d.fr', ''),
         client_email: data.client,
         fichier: data.file,
-        prix: '31.11€',
+        prix: window.calculPrixHB3D(63, 154),  // ← 27.81€ HT AUTO
+        details: '⚖️ 63g | ⏱️ 2h34 | 💰 27.81€ HT (franchise TVA)',
         stripe_link: data.stripe,
-        message: `DEVIS COMPLET:\n👤 ${data.client}\n📄 ${data.file}\n💰 31.11€\n🔗 ${data.stripe}`
+        message: `DEVIS COMPLET:\n👤 ${data.client}\n📄 ${data.file}\n💰 ${window.calculPrixHB3D(63, 154)}\n🔗 ${data.stripe}`
       });
       console.log(`✅ ✅ ✅ DEVIS ${data.client} → hbereksi@hb3d.fr !`);
     }, 1000);
@@ -129,6 +139,7 @@ console.log = (...args) => {
 
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
+
 
 </body>
 </html>
