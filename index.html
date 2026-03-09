@@ -77,30 +77,34 @@ window.sendMetriEmail = async function(orderData) {
 };
 console.log("🚀 3DMetri + EmailJS = PRÊT !");
 </script>
-             <!-- 3. DOM MutationObserver (SAFE - sans console.log) -->
+<!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
 let emailSent = false;
 const observer = new MutationObserver(() => {
   if(document.body.textContent.includes('Mail sended') && !emailSent) {
     emailSent = true;
-    console.log("🎯 MAIL SENDED détecté → EmailJS !");
+    console.log("🎯 MAIL SENDED détecté → EmailJS (3s délai)");
     
-    emailjs.send("service_np51rgo", "template_7mjwzt9", {
-      from_name: '3DMetri HB3D AUTO',
-      to_email: 'hbereksi@hb3d.fr',
-      printer: 'BambuLab X1C',
-      material: 'PLA Noir',
-      total: '31.11€',
-      message: `Vz61ModM_Holster_N1_Cytac.stl - 31.11€ - S3/Paiement OK`
-    }).then(() => {
-      console.log("✅ ✅ ✅ DEVIS → hbereksi@hb3d.fr !");
-    }).catch(e => {
-      console.error("❌ EmailJS ERROR:", e);
-    });
+    // DÉLAI 3s = EmailJS 100% prêt
+    setTimeout(async () => {
+      try {
+        await emailjs.send("service_np51rgo", "template_7mjwzt9", {
+          from_name: '3DMetri HB3D AUTO',
+          to_email: 'hbereksi@hb3d.fr',
+          printer: 'BambuLab X1C',
+          material: 'PLA Noir',
+          total: '31.11€',
+          message: `Vz61ModM_Holster_N1_Cytac.stl - 31.11€ - S3/Paiement OK`
+        });
+        console.log("✅ ✅ ✅ DEVIS → hbereksi@hb3d.fr !");
+      } catch(e) {
+        console.error("❌ EmailJS ERROR détaillé:", e);
+      }
+    }, 3000); // 3 secondes safe
   }
 });
 observer.observe(document.body, { childList: true, subtree: true });
-console.log("🚀 MutationObserver 3DMetri = ACTIVÉ !");
+console.log("🚀 MutationObserver SAFE = ACTIVÉ !");
 </script>
 
 </body>
