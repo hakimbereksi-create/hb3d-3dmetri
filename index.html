@@ -79,42 +79,55 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 </script>
 <!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
-// 20s APRÈS TOUT CHARGEMENT = 100% DONNÉES PRÉSENTES
-setTimeout(() => {
-  console.log("⏱️ 20s → Extraction EmailJS !");
-  
-  // FORCE extraction des DERniers logs 3DMetri
-  const allText = document.body.textContent;
-  const productMatch = allText.match(/productName:\s*\{[^}]*(['"`][^'"`]+['"`])/);
-  const stripeMatch = allText.match(/https:\/\/buy\.stripe\.com\/test_[^\s\n\r]+/);
-  const fileMatch = allText.match(/object_key:\s*['"`]([^'"\s]+?\.stl)['"`]/);
-  
-  const clientFull = productMatch ? productMatch[1] : '1773020405115hbereksi@hb3d.fr';
-  const clientId = clientFull.replace(/hbereksi@hb3d\.fr$/, '');
-  const stripeLink = stripeMatch ? stripeMatch[0] : 'https://buy.stripe.com/test_OK';
-  const fichier = fileMatch ? fileMatch[1] : 'Vz61ModM_Holster_N1_Cytac (1).stl';
-  
-  console.log("📊 EXTRAIT:", {clientId, stripeLink, fichier});
-  
-  emailjs.send("service_np51rgo", "template_7mjwzt9", {
-    from_name: '🚀 3DMetri HB3D Lille',
-    to_email: 'hbereksi@hb3d.fr',
-    client_id: clientId,
-    client_email: clientFull,
-    fichier: fichier,
-    prix: '31.11€',
-    stripe_link: stripeLink,
-    volume: '20 cm³',
-    printer: 'BambuLab X1C',
-    message: `DEVIS COMPLET HB3D:\n👤 ${clientId}\n📄 ${fichier}\n💰 31.11€\n🔗 ${stripeLink}`
-  }).then(() => {
-    console.log(`✅ ✅ ✅ DEVIS ${clientId} → hbereksi@hb3d.fr !`);
-  }).catch(e => {
-    console.error("EmailJS ERROR:", e);
-  });
-}, 20000); // 20 SECONDES = IMPERTURBABLE
+// INTERCEPTE console.log 3DMetri EN TEMPS RÉEL
+const data = { client: '', stripe: '', file: '' };
+let processComplete = false;
 
-console.log("🚀 20s BULLET-PROOF = ACTIVÉ !");
+const originalLog = console.log;
+console.log = (...args) => {
+  const msg = args[0];
+  
+  // CAPTURE client ID
+  if(msg?.productName) {
+    data.client = msg.productName;
+    console.log("👤 CLIENT capturé:", data.client);
+  }
+  
+  // CAPTURE Stripe link
+  if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
+    data.stripe = msg;
+    console.log("💳 STRIPE capturé:", data.stripe);
+  }
+  
+  // CAPTURE fichier STL
+  if(msg?.object_key) {
+    data.file = msg.object_key;
+    console.log("📄 FICHIER capturé:", data.file);
+  }
+  
+  // déclencheur FINAL : TOUS 3 éléments + File Uploaded
+  if(msg === 'File Uploaded with success' && data.client && data.stripe && data.file && !processComplete) {
+    processComplete = true;
+    
+    setTimeout(async () => {
+      await emailjs.send("service_np51rgo", "template_7mjwzt9", {
+        from_name: '🚀 3DMetri HB3D Lille',
+        to_email: 'hbereksi@hb3d.fr',
+        client_id: data.client.replace('hbereksi@hb3d.fr', ''),
+        client_email: data.client,
+        fichier: data.file,
+        prix: '31.11€',
+        stripe_link: data.stripe,
+        message: `DEVIS COMPLET:\n👤 ${data.client}\n📄 ${data.file}\n💰 31.11€\n🔗 ${data.stripe}`
+      });
+      console.log(`✅ ✅ ✅ DEVIS ${data.client} → hbereksi@hb3d.fr !`);
+    }, 1000);
+  }
+  
+  originalLog(...args);
+};
+
+console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
 
 </body>
