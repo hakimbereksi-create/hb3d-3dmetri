@@ -77,33 +77,6 @@ window.sendMetriEmail = async function(orderData) {
 };
 console.log("🚀 3DMetri + EmailJS = PRÊT !");
 </script>
-<!-- 3. NOUVEAU : Intercepteur "Mail sended" (AJOUTE ÇA) -->
-<script>
-(function(){
-  const oldLog = console.log.bind(console);
-  console.log = function(...args) {
-    if(args[0]?.includes('Mail sended')) {
-      console.log("🎯 MAIL SENDED → EmailJS hbereksi@hb3d.fr !");
-      
-      emailjs.send("service_np51rgo", "template_7mjwzt9", {
-        from_name: '3DMetri HB3D AUTO',
-        to_email: 'hbereksi@hb3d.fr',
-        printer: 'BambuLab X1C',
-        material: 'PLA Noir',
-        total: '31.11€',
-        message: `Vz61ModM_Holster_N1_Cytac.stl - 31.11€ - S3/Paiement OK`
-      }).then(() => {
-        console.log("🎯 MAIL SENDED → EmailJS hbereksi@hb3d.fr !");
-        console.log("✅ ✅ ✅ DEVIS → hbereksi@hb3d.fr !");
-      }).catch(e => {
-        console.error("❌ EmailJS ERROR:", e);
-      });
-    }
-    oldLog(...args);
-  };
-  console.log("🚀 Intercepteur Mail sended = ACTIVÉ !");
-})();
-</script>
 
 </body>
 </html>
