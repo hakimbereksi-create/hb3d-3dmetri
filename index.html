@@ -80,6 +80,34 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 <!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
 // INTERCEPTE console.log 3DMetri EN TEMPS RÉEL
+// === CALCUL EXCEL HB3D (AU DÉBUT) ===
+window.calculPrixHB3D = (poids, tempsMin) => {
+  const mat = poids * 0.02;
+  const mach = (tempsMin / 60) * 19.2;  
+  return ((mat + mach) * 1.1).toFixed(2) + '€ TTC'; // Prix final client
+};
+
+// INJECTION CSS (au chargement 3DMetri) ✅
+const style = document.createElement('style');
+style.textContent = `
+  /* Cache le prix USD 3DMetri */
+  [class*="price"], [class*="usd"], .price-usd { 
+    display: none !important; 
+  }
+`;
+document.head.appendChild(style);
+
+// 🔥 Overlay HB3D EUR (visible immédiatement)
+const overlay = document.createElement('div');
+overlay.id = 'hb3d-overlay';
+overlay.style.cssText = `
+  position:fixed; top:10px; right:10px; 
+  background:#28a745; color:white; padding:12px 16px; 
+  border-radius:8px; z-index:99999; font-weight:bold; 
+  font-size:16px; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+`;
+overlay.innerHTML = `💰 ${window.calculPrixHB3D(63,154)}`;
+document.body.appendChild(overlay);
 
 // === CALCUL EXCEL HB3D (AU DÉBUT) ===
 window.calculPrixHB3D = (poids, tempsMin) => {
