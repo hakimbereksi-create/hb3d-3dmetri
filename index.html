@@ -81,31 +81,37 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 <script>
 let emailSent = false;
 const observer = new MutationObserver(() => {
-  if(document.body.textContent.includes('Mail sended') && !emailSent) {
+  if(document.body.textContent.includes('File Uploaded') && !emailSent) {
     emailSent = true;
-    console.log("🎯 MAIL SENDED détecté → EmailJS (3s délai)");
+    console.log("🎯 FILE UPLOADED → EmailJS !");
     
-    // DÉLAI 3s = EmailJS 100% prêt
+    // EXTRAIT client des logs 3DMetri
+    const productMatch = document.body.textContent.match(/productName: '([^']+hbereksi@hb3d\.fr)'/);
+    const clientEmail = productMatch ? productMatch[1].replace('hbereksi@hb3d.fr', '') : 'Client HB3D';
+    
     setTimeout(async () => {
       try {
         await emailjs.send("service_np51rgo", "template_7mjwzt9", {
-          from_name: '3DMetri HB3D AUTO',
+          from_name: '3DMetri HB3D',
           to_email: 'hbereksi@hb3d.fr',
-          printer: 'BambuLab X1C',
-          material: 'PLA Noir',
-          total: '31.11€',
-          message: `Vz61ModM_Holster_N1_Cytac.stl - 31.11€ - S3/Paiement OK`
+          client_email: clientEmail,
+          fichier: 'Vz61ModM_Holster_N1_Cytac.stl',
+          volume: '20 cm³',
+          prix: '31.11€',
+          stripe_link: document.body.textContent.match(/https:\/\/buy\.stripe\.com\/test_[^\s]+/)?.[0] || 'Stripe OK',
+          message: `${clientEmail} - Vz61ModM_Holster - 31.11€ - Fichier S3 uploadé`
         });
-        console.log("✅ ✅ ✅ DEVIS → hbereksi@hb3d.fr !");
+        console.log("✅ ✅ ✅ DEVIS COMPLET → hbereksi@hb3d.fr !");
       } catch(e) {
-        console.error("❌ EmailJS ERROR détaillé:", e);
+        console.error("❌ EmailJS ERROR:", e);
       }
-    }, 3000); // 3 secondes safe
+    }, 2000);
   }
 });
 observer.observe(document.body, { childList: true, subtree: true });
-console.log("🚀 MutationObserver SAFE = ACTIVÉ !");
+console.log("🚀 EmailJS DYNAMIQUE = ACTIVÉ !");
 </script>
+
 
 </body>
 </html>
