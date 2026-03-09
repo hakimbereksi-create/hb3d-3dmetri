@@ -80,30 +80,77 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 <!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
 // INTERCEPTE console.log 3DMetri EN TEMPS RÉEL
-const data = { client: '', stripe: '', file: '' };
-let processComplete = false;
 
+// === CALCUL EXCEL HB3D (précis) ===
+window.calculPrixHB3D = function(poidsGrammes, tempsMinutes) {
+  const materiau = poidsGrammes * 0.02;
+  const heures = tempsMinutes / 60;  
+  const machine = heures * 19.2;
+  const sousTotal = materiau + machine;
+  const perte = sousTotal * 0.10;
+  const prixHT = sousTotal + perte;
+  
+  return {
+    prixHT: prixHT.toFixed(2) + "€ HT",
+    details: `⚖️ ${poidsGrammes}g | ⏱️ ${Math.floor(tempsMinutes/60)}h${(tempsMinutes%60).toString().padStart(2,'0')}m | 💰 ${prixHT.toFixed(2)}€ HT (franchise TVA)`,
+    materiau: materiau.toFixed(2),
+    machine: machine.toFixed(2),
+    perte: perte.toFixed(2)
+  };
+};
+
+// === INTERCEPTEUR ===
+(function() {
+  const originalConsoleLog = console.log;
+  
+  console.log = function(...args) {
+    let poidsGrammes = null;
+    let tempsMinutes = null;
+    let nomFichier = null;
+    
+    args.forEach(arg => {
+      if (arg && typeof arg === 'string') {
+        // ✅ CORRIGÉ : Poids
+        const poidsMatch = arg.match(/(\d+)\s*g/);
+        if (poidsMatch) poidsGrammes = parseInt(poidsMatch[1]);
+        
+        // ✅ CORRIGÉ : Temps
+        const tempsMatch = arg.match(/(\d+):(\d+)/);
+        if (tempsMatch) {
+          tempsMinutes = parseInt(tempsMatch[1]) * 60 + parseInt(tempsMatch[2]);
+        }
+        
+        if (arg.includes('.stl')) nomFichier = arg;
+      }
+    });
+    
+    if (poidsGrammes && tempsMinutes) {
+      const prix = calculPrixHB3D(poidsGrammes, tempsMinutes);
+      
+      console.log("🚀 HB3D CALCUL EXCEL:", prix.prixHT);
+      console.log("📊 DÉTAIL:", prix.details);
+      console.log("👤 CLIENT:", "1773022308623hbereksi@hb3d.fr");
+      console.log("📄 FICHIER:", nomFichier || "Holster.stl");
+      
+      window.hb3dData = {
+        client_id: "1773022308623",
+        client_email: "1773022308623hbereksi@hb3d.fr",
+        fichier: nomFichier || "Holster.stl",
+        prix: prix.prixHT,
+        details: prix.details,
+        stripe_link: "https://buy.stripe.com/test_8x200jf4v8RV5JhfwNg362c"
+      };
+    }
+    
+    originalConsoleLog.apply(console, args);
+  };
+})();
+
+// TON déclencheur FINAL (parfait)
+let processComplete = false;
 const originalLog = console.log;
-console.log = (...args) => {
-  const msg = args[0];
-  
-  // CAPTURE client ID
-  if(msg?.productName) {
-    data.client = msg.productName;
-    console.log("👤 CLIENT capturé:", data.client);
-  }
-  
-  // CAPTURE Stripe link
-  if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
-    data.stripe = msg;
-    console.log("💳 STRIPE capturé:", data.stripe);
-  }
-  
-  // CAPTURE fichier STL
-  if(msg?.object_key) {
-    data.file = msg.object_key;
-    console.log("📄 FICHIER capturé:", data.file);
-  }
+console.log = function(...args) {
+  // ... ton code existant pour data.client/data.stripe/data.file
   
   // déclencheur FINAL : TOUS 3 éléments + File Uploaded
   if(msg === 'File Uploaded with success' && data.client && data.stripe && data.file && !processComplete) {
@@ -116,9 +163,10 @@ console.log = (...args) => {
         client_id: data.client.replace('hbereksi@hb3d.fr', ''),
         client_email: data.client,
         fichier: data.file,
-        prix: '31.11€',
+        prix: window.hb3dData ? window.hb3dData.prix : '27.81€ HT',
+        details: window.hb3dData ? window.hb3dData.details : '',
         stripe_link: data.stripe,
-        message: `DEVIS COMPLET:\n👤 ${data.client}\n📄 ${data.file}\n💰 31.11€\n🔗 ${data.stripe}`
+        message: `DEVIS COMPLET:\n👤 ${data.client}\n📄 ${data.file}\n💰 ${window.hb3dData ? window.hb3dData.prix : '27.81€ HT'}\n🔗 ${data.stripe}`
       });
       console.log(`✅ ✅ ✅ DEVIS ${data.client} → hbereksi@hb3d.fr !`);
     }, 1000);
@@ -132,6 +180,9 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 
 </body>
 </html>
+
+
+
 
 
  
