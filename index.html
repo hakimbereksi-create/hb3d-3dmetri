@@ -15,7 +15,7 @@
       LANG: "en"
       
       }</script><link href=./css/app.4265f852.css rel=preload as=style><link href=./css/chunk-vendors.c5ad45e3.css rel=preload as=style><link href=./js/app.edf779c6.js rel=preload as=script><link href=./js/chunk-vendors.e236e539.js rel=preload as=script><link href=./css/chunk-vendors.c5ad45e3.css rel=stylesheet><link href=./css/app.4265f852.css rel=stylesheet></head><body><noscript><strong>We're sorry but integrate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=app></div><script src=./js/chunk-vendors.e236e539.js></script><script src=./js/app.edf779c6.js></script>
-<!-- EMAILJS 3DMetri - TES IDs -->
+<!-- EMAILJS 3DMetri - SANS checkout -->
 <script>
 const PUBLIC_KEY = "DCpEyOckFUUHGxM_Os";
 const SERVICE_ID = "service_np51rgo";
@@ -25,14 +25,15 @@ emailjs.init({ publicKey: PUBLIC_KEY });
 
 setTimeout(() => {
   document.addEventListener('click', async (e) => {
-    if(e.target.matches('button[type="submit"], .checkout, .btn, input[type="submit"]')){
+    // ❌ SUPPRIMÉ .checkout → Garde SEULEMENT boutons secondaires
+    if(e.target.matches('button[type="submit"], .btn, input[type="submit"]')){
       e.preventDefault();
       
       const total = document.querySelector('.total, [class*="total"]')?.textContent?.trim() || '$15.13';
       const printer = Array.from(document.querySelectorAll('select'))
         ?.find(s => s.innerHTML.includes('Bambu'))?.selectedOptions[0]?.text || 'BambuLab X1C';
       
-      console.log('📤 ENVOI:', {printer, total});
+      console.log('📤 ENVOI MANUEL:', {printer, total});
       
       try {
         await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
@@ -41,9 +42,9 @@ setTimeout(() => {
           printer: printer,
           material: 'PLA Noir',
           total: total,
-          message: `Devis 3DMetri: ${printer} - ${total}`
+          message: `Devis 3DMetri MANUEL: ${printer} - ${total}`
         });
-        alert('✅ Devis envoyé à hakim@hb3d.fr !');
+        alert('✅ Devis MANUEL envoyé à hbereksi@hb3d.fr !');
       } catch(e) {
         console.error('EmailJS erreur:', e);
         alert('❌ Erreur envoi - Console F12');
@@ -52,6 +53,7 @@ setTimeout(() => {
   });
 }, 3000);
 </script>
+
 
 <!-- 3DMetri AUTO EmailJS -->
 <script>
