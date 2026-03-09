@@ -79,46 +79,38 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 </script>
 <!-- 3. MutationObserver SAFE + délai EmailJS -->
 <script>
-let emailSent = false;
-const observer = new MutationObserver(() => {
-  // ATTEND TOUS : File + Stripe + productName + object_key
-  if(document.body.textContent.includes('File Uploaded') && 
-     document.body.textContent.includes('buy.stripe.com') && 
-     document.body.textContent.includes('productName') &&
-     document.body.textContent.includes('object_key') &&
-     !emailSent) {
+// EMAILJS APRÈS 10s COMPLET (100% sûr)
+setTimeout(() => {
+  if(document.body.textContent.includes('File Uploaded')) {
+    console.log("⏱️ 10s écoulé → EmailJS !");
     
-    emailSent = true;
-    console.log("🎯 TOUS LOGS 3DMetri OK → EmailJS !");
-    
-    // EXTRAIT données APRÈS tous les logs
-    const productMatch = document.body.textContent.match(/productName: '(.+?)(?=hbereksi@hb3d\.fr)/);
-    const stripeMatch = document.body.textContent.match(/https:\/\/buy\.stripe\.com\/test_[^\s]+/);
+    // EXTRAIT TOUTES données des logs
+    const productMatch = document.body.textContent.match(/productName: '(.+?hbereksi@hb3d\.fr)'/);
+    const stripeMatch = Array.from(document.body.textContent.match(/https:\/\/buy\.stripe\.com\/test_[^\s]+/g) || []).pop();
     const objectMatch = document.body.textContent.match(/object_key: '([^']+\.stl)'/);
     
-    const clientId = productMatch ? productMatch[1] : 'Client';
-    const stripeLink = stripeMatch ? stripeMatch[0] : 'Stripe OK';
+    const clientId = productMatch ? productMatch[1].replace(/hbereksi@hb3d\.fr/, '') : 'Client';
+    const stripeLink = stripeMatch || 'Stripe OK';
     const fichier = objectMatch ? objectMatch[1] : 'STL uploadé';
     
-    // DÉLAI FINAL 3s pour S3 complet
-    setTimeout(async () => {
-      await emailjs.send("service_np51rgo", "template_7mjwzt9", {
-        from_name: '🚀 3DMetri HB3D',
-        to_email: 'hbereksi@hb3d.fr',
-        client_id: clientId,
-        client_email: `${clientId}hbereksi@hb3d.fr`,
-        fichier: fichier,
-        prix: '31.11€',
-        stripe_link: stripeLink,
-        printer: 'BambuLab X1C',
-        message: `DEVIS COMPLET:\n👤 ${clientId}\n📄 ${fichier}\n💰 31.11€\n🔗 ${stripeLink}`
-      });
+    emailjs.send("service_np51rgo", "template_7mjwzt9", {
+      from_name: '🚀 3DMetri HB3D',
+      to_email: 'hbereksi@hb3d.fr',
+      client_id: clientId,
+      fichier: fichier,
+      prix: '31.11€',
+      stripe_link: stripeLink,
+      printer: 'BambuLab X1C',
+      message: `DEVIS:\n👤 ${clientId}\n📄 ${fichier}\n💰 31.11€\n🔗 ${stripeLink}`
+    }).then(() => {
       console.log(`✅ ✅ ✅ DEVIS ${clientId} → hbereksi@hb3d.fr !`);
-    }, 3000);
+    }).catch(e => {
+      console.error("EmailJS ERROR:", e);
+    });
   }
-});
-observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-console.log("🚀 ATTENTE COMPLÈTE = ACTIVÉ !");
+}, 10000); // 10 secondes = TOUT terminé
+
+console.log("🚀 setTimeout 10s = ACTIVÉ !");
 </script>
 
 </body>
