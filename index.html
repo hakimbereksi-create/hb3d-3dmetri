@@ -82,11 +82,10 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 // INTERCEPTE console.log 3DMetri EN TEMPS RÉEL
 
 // === CALCUL EXCEL HB3D (AU DÉBUT) ===
-window.calculPrixHB3D = function(poids, tempsMin) {
+window.calculPrixHB3D = (poids, tempsMin) => {
   const mat = poids * 0.02;
-  const mach = (tempsMin / 60) * 19.2;
-  const perte = (mat + mach) * 0.10;
-  return (mat + mach + perte).toFixed(2) + '€ HT';
+  const mach = (tempsMin / 60) * 19.2;  
+  return ((mat + mach) * 1.1).toFixed(2) + '€ TTC'; // Prix final client
 };
 
 const data = { client: '', stripe: '', file: '' };
@@ -102,11 +101,15 @@ console.log = (...args) => {
     console.log("👤 CLIENT capturé:", data.client);
   }
   
-  // CAPTURE Stripe link
-  if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
-    data.stripe = msg;
-    console.log("💳 STRIPE capturé:", data.stripe);
-  }
+// CAPTURE Stripe link  
+if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
+  data.stripe = msg;
+  console.log("💳 STRIPE capturé:", data.stripe);
+  
+  // 🔥 AJOUT ICI : Force EUR + Français
+  data.stripe = data.stripe + '?prefilled_currency=eur&locale=fr';
+  console.log("💳 STRIPE EUR:", data.stripe);
+}
   
   // CAPTURE fichier STL
   if(msg?.object_key) {
