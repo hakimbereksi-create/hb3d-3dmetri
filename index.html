@@ -81,35 +81,47 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
 <script>
 let emailSent = false;
 const observer = new MutationObserver(() => {
-  if(document.body.textContent.includes('File Uploaded') && !emailSent) {
-    emailSent = true;
-    console.log("🎯 FILE UPLOADED → EmailJS !");
+  // ATTEND TOUS les logs 3DMetri + délai supplémentaire
+  if(document.body.textContent.includes('File Uploaded') && 
+     document.body.textContent.includes('Stripe') && 
+     !emailSent) {
     
-    // EXTRAIT client des logs 3DMetri
-    const productMatch = document.body.textContent.match(/productName: '([^']+hbereksi@hb3d\.fr)'/);
-    const clientEmail = productMatch ? productMatch[1].replace('hbereksi@hb3d.fr', '') : 'Client HB3D';
+    emailSent = true;
+    console.log("🎯 PROCESSUS 3DMetri TERMINÉ → EmailJS !");
+    
+    // EXTRAIT TOUTES les données des logs
+    const productMatch = document.body.textContent.match(/productName: '(.+?hbereksi@hb3d\.fr)'/i);
+    const stripeMatch = document.body.textContent.match(/https:\/\/buy\.stripe\.com\/test_[^\s]+/);
+    const objectMatch = document.body.textContent.match(/object_key: '(.+?\.stl)'/);
+    
+    const clientId = productMatch ? productMatch[1].replace(/hbereksi@hb3d\.fr/i, '') : 'Client';
+    const stripeLink = stripeMatch ? stripeMatch[0] : 'Stripe généré';
+    const fichier = objectMatch ? objectMatch[1] : 'Fichier STL uploadé';
     
     setTimeout(async () => {
       try {
         await emailjs.send("service_np51rgo", "template_7mjwzt9", {
-          from_name: '3DMetri HB3D',
+          from_name: '🚀 3DMetri HB3D AUTO',
           to_email: 'hbereksi@hb3d.fr',
-          client_email: clientEmail,
-          fichier: 'Vz61ModM_Holster_N1_Cytac.stl',
+          client_id: clientId,
+          client_email: `${clientId}hbereksi@hb3d.fr`,
+          fichier: fichier,
           volume: '20 cm³',
           prix: '31.11€',
-          stripe_link: document.body.textContent.match(/https:\/\/buy\.stripe\.com\/test_[^\s]+/)?.[0] || 'Stripe OK',
-          message: `${clientEmail} - Vz61ModM_Holster - 31.11€ - Fichier S3 uploadé`
+          stripe_link: stripeLink,
+          printer: 'BambuLab X1C',
+          material: 'PLA Noir',
+          message: `NOUVEAU DEVIS HB3D:\n👤 ${clientId}\n📄 ${fichier}\n💰 31.11€\n🔗 ${stripeLink}`
         });
-        console.log("✅ ✅ ✅ DEVIS COMPLET → hbereksi@hb3d.fr !");
+        console.log(`✅ ✅ ✅ DEVIS COMPLET ${clientId} → hbereksi@hb3d.fr !`);
       } catch(e) {
         console.error("❌ EmailJS ERROR:", e);
       }
-    }, 2000);
+    }, 4000); // 4s = TOUT est chargé
   }
 });
-observer.observe(document.body, { childList: true, subtree: true });
-console.log("🚀 EmailJS DYNAMIQUE = ACTIVÉ !");
+observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+console.log("🚀 MutationObserver OPTIMISÉ = ACTIVÉ !");
 </script>
 
 
