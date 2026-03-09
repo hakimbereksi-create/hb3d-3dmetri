@@ -68,7 +68,7 @@ window.sendMetriEmail = async function(orderData) {
             total: (orderData.amount/100)+"€",
             message: `AUTO: ${orderData.productName || 'STL'} - ${(orderData.amount/100)}€`
         });
-        console.log("✅ DEVIS 3DMetri → hakim@hb3d.fr !");
+        console.log("✅ DEVIS 3DMetri → hbereksi@hb3d.fr !");
     } catch(e) {
         console.error("3DMetri EmailJS failed:", e);
     }
@@ -93,6 +93,7 @@ console.log("🚀 3DMetri + EmailJS = PRÊT !");
         total: '31.11€',
         message: `Vz61ModM_Holster_N1_Cytac.stl - 31.11€ - S3/Paiement OK`
       }).then(() => {
+        console.log("🎯 MAIL SENDED → EmailJS hbereksi@hb3d.fr !");
         console.log("✅ ✅ ✅ DEVIS → hbereksi@hb3d.fr !");
       }).catch(e => {
         console.error("❌ EmailJS ERROR:", e);
