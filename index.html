@@ -171,37 +171,38 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
             <script>
-// === 3DMetri EUR + FR NATIVE (FIX ERREUR) ===
+// === 3DMetri EUR + FR FORCE (CONTINU) ===
 ( function() {
-  // 1. DEVISES + LANGUE
-  window.currency = 'EUR'; 
-  Object.defineProperty(window, 'DEFAULT_CURRENCY', {value: 'EUR', writable: false});
-  window.language = 'fr';
-  window.locale = 'fr_FR';
-  document.documentElement.lang = 'fr';
+  const forceEUR_FR = () => {
+    // Override agressif
+    window.currency = 'EUR';
+    Object.defineProperty(window, 'DEFAULT_CURRENCY', {value: 'EUR', writable: false});
+    window.language = 'fr'; 
+    window.locale = 'fr_FR';
+    document.documentElement.lang = 'fr';
+    
+    console.log("🔥 3DMetri HB3D EUR+FR FORCÉ !");
+  };
   
-  // 2. Prix Excel HB3D
+  // 1. AU CHARGEMENT
+  forceEUR_FR();
+  
+  // 2. À CHAQUE CHANGEMENT 3DMetri
+  const observer = new MutationObserver(forceEUR_FR);
+  observer.observe(document.body, {childList: true, subtree: true});
+  
+  // 3. TOUTES les 2s (garanti)
+  setInterval(forceEUR_FR, 2000);
+  
+  // 4. Prix Excel
   window.calculPrixHB3D = (poids, tempsMin) => {
-    const mat = poids * 0.02;
-    const mach = (tempsMin / 60) * 19.2;  
+    const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
     return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
   };
   
-  // 3. Console SAFE (FIX ERREUR args[0])
-  const oldLog = console.log;
-  console.log = (...args) => {
-    // FIX : Vérifie que args[0] existe ET est string
-    if(args[0] && typeof args[0] === 'string' && args[0].includes('buy.stripe.com')) {
-      args[0] += '?prefilled_currency=eur&locale=fr';
-    }
-    oldLog(...args);
-  };
-  
-  console.log("🚀 3DMetri HB3D EUR+FR chargé (FIX) !");
+  console.log("🚀 3DMetri HB3D FORCE EUR+FR ACTIVÉ !");
 })();
 </script>
-
-
 
 
 </body>
