@@ -209,38 +209,32 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 })();
 </script>
 
-   
+</head>
+<body>  
 
-  <!-- 👇 AJOUTE ÇA À LA FIN (AVANT </body>) -->
-  <script>
-  // === TRADUCTION 3DMetri HB3D ===
-  document.addEventListener('DOMContentLoaded', () => {
-    const traductions = {
-      'To Receive Instant Quote': 'Recevoir Devis Instantané',
-      'Upload your 3D files': 'Uploadez vos fichiers 3D', 
-      'Total': 'Total TTC',
-      'USD': 'EUR'
-    };
-    
-    const observer = new MutationObserver(() => {
-      Object.entries(traductions).forEach(([en, fr]) => {
-        document.querySelectorAll('*').forEach(el => {
-          if (el.textContent && el.textContent.includes(en)) {
-            el.textContent = el.textContent.replace(new RegExp(en, 'g'), fr);
-          }
-        });
+<script>
+// === TRADUCTION 3DMetri HB3D (SAFE) ===
+( function() {
+  const trad = {
+    'To Receive Instant Quote': 'Recevoir Devis Instantané',
+    'Upload your 3D files': 'Uploadez vos fichiers 3D',
+    'Total': 'Total TTC'
+  };
+  
+  // UNE SEULE fois après 2s
+  setTimeout(() => {
+    Object.entries(trad).forEach(([en, fr]) => {
+      const els = document.querySelectorAll(`:contains("${en}")`);
+      els.forEach(el => {
+        if(el.textContent) el.textContent = el.textContent.replace(en, fr);
       });
     });
-    
-    observer.observe(document.body, { 
-      subtree: true, 
-      childList: true,
-      characterData: true 
-    });
-    
-    console.log("🚀 TRADUCTION HB3D ACTIVÉE !");
-  });
-  </script>
+    console.log("✅ TRADUCTION HB3D OK !");
+  }, 2000);
+  
+})();
+</script>
+
   
 
 
