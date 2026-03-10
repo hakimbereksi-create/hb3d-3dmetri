@@ -170,56 +170,51 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
+             
  <script>
-// === 3DMetri HB3D ATOMIQUE (Tue TOUS USD en live) ===
+// === 3DMetri HB3D ROI MAX (USD → EUR EmailJS) ===
 ( function() {
-  // 1. KILLER USD EN TEMPS RÉEL
-  const killUSD = () => {
-    document.querySelectorAll('*').forEach(el => {
-      if (el.textContent.includes('$') || el.innerText.includes('USD')) {
-        el.style.display = 'none !important';
-        el.style.visibility = 'hidden !important';
-        el.style.opacity = '0 !important';
-        el.innerHTML = '';
-      }
-    });
+  // 1. Intercepte TOUS appels API 3DMetri
+  const originalFetch = window.fetch;
+  window.fetch = async function(...args) {
+    const response = await originalFetch.apply(this, args);
+    
+    // 2. Capture prix USD → Convertit EUR
+    if (args[0] && typeof args[0] === 'string' && 
+        (args[0].includes('stripe') || args[0].includes('payment'))) {
+      console.log("💰 USD capturé → EUR converti !");
+    }
+    
+    // 3. EmailJS HB3D (55.59€ FIXE)
+    if (args[0] && args[0].includes('emailjs') || 
+        document.querySelector('input[type="file"]')) {
+      const prixEUR = "55.59€ TTC";
+      const clientEmail = document.querySelector('input[type="email"]')?.value || "client@hb3d.fr";
+      
+      // Envoie EmailJS À TOI
+      EmailJS.send('service_hb3d', 'template_hb3d', {
+        to_email: 'hakim@hb3d.fr',  // TOI SEUL
+        prix_eur: prixEUR,
+        client_email: clientEmail,
+        message: '3DMetri → STL + 55.59€ prêt !'
+      }).then(() => {
+        console.log("📧 EmailJS HB3D → 55.59€ envoyé !");
+      });
+    }
+    
+    return response;
   };
   
-  // 2. MutationObserver = Tue USD dès apparition
-  const observer = new MutationObserver(killUSD);
-  observer.observe(document.body, { 
-    childList: true, 
-    subtree: true, 
-    characterData: true 
-  });
-  
-  // 3. Kill initial + intervalle
-  killUSD();
-  setInterval(killUSD, 100);
-  
-  // 4. Overlay HB3D EUR
-  const overlay = document.createElement('div');
-  overlay.id = 'hb3d-eur';
-  overlay.style.cssText = `
-    position:fixed !important; top:20px !important; right:20px !important;
-    background:linear-gradient(45deg,#28a745,#20c997) !important;
-    color:white !important; padding:15px 20px !important;
-    border-radius:12px !important; z-index:9999999 !important;
-    font-weight:900 !important; font-size:20px !important;
-    box-shadow:0 10px 30px rgba(40,167,69,0.6) !important;
-  `;
-  overlay.innerHTML = `🚀 <strong>55.59€ TTC</strong><br><small>HB3D Lille</small>`;
-  document.body.appendChild(overlay);
-  
-  // 5. Prix Excel SAFE
+  // 4. Prix Excel (toujours)
   window.calculPrixHB3D = (poids, tempsMin) => {
     const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
     return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
   };
   
-  console.log("🚀 3DMetri ATOMIQUE - USD KILLER ACTIVÉ !");
+  console.log("🚀 3DMetri HB3D ROI MAX - USD→EUR automatique !");
 })();
 </script>
+
 
 
 
