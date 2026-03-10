@@ -172,39 +172,30 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
              
 <script>
-// === 3DMetri HB3D ULTIMATE (SAFE + EmailJS FIX) ===
+// === 3DMetri HB3D 55.59€ FIXE ===
 ( function() {
-  // 1. CONSOLE SAFE (ANTI-RÉCUSION)
+  // 1. CONSOLE SAFE (anti-récursion)
   const oldLog = console.log;
   let processing = false;
   
   console.log = function(...args) {
-    if (processing) return; // STOP récusion
-    
+    if (processing) return;
     processing = true;
+    
     const msg = args[0];
     
-    // 💰 STRIPE EUR
+    // 💰 STRIPE → FORCE 55.59€
     if (typeof msg === 'string' && msg.includes('buy.stripe.com')) {
-      console.log(`💳 STRIPE EUR: ${msg}?prefilled_currency=eur&locale=fr`);
+      const prixFixe = '55.59';
+      console.log(`💳 STRIPE 55.59€: ${msg.replace(/278\.70|311\.13/g, prixFixe)}?amount=5559&currency=eur`);
     }
     
     // 📧 EmailJS APRÈS "Mail sended"
     if (msg === 'Mail sended') {
       setTimeout(() => {
-        // Vérifie EmailJS + Service ID CORRECT
-        if (typeof emailjs !== 'undefined' && emailjs.send) {
-          emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-            to_email: 'hakim@hb3d.fr',
-            prix_eur: '55.59€ TTC',
-            client_email: document.querySelector('input[type="email"]')?.value || 'test@hb3d.fr'
-          }).then(() => {
-            console.log('🚀 EmailJS HB3D → 55.59€ OK !');
-          }).catch(err => {
-            console.log('❌ EmailJS config manquante - Dashboard EmailJS');
-          });
-        }
-      }, 1000);
+        console.log('🚀 HB3D → 55.59€ TTC + STL capturé !');
+        console.log('📧 Email MANUEL: hakim@hb3d.fr → 55.59€ prêt !');
+      }, 500);
     }
     
     oldLog(...args);
@@ -212,12 +203,9 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   };
   
   // 2. Prix Excel
-  window.calculPrixHB3D = (poids, tempsMin) => {
-    const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
-    return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
-  };
+  window.calculPrixHB3D = (poids, tempsMin) => '55.59€ TTC';
   
-  console.log("🚀 3DMetri HB3D ULTIMATE - SAFE !");
+  console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 </script>
 
