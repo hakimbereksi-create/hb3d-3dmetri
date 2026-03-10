@@ -170,6 +170,45 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
+             <script>
+// === 3DMetri EUR + FR NATIVE (COMPLÈT) ===
+( function() {
+  // 1. DEVISES + LANGUE (AU CHARGEMENT)
+  window.currency = 'EUR'; 
+  Object.defineProperty(window, 'DEFAULT_CURRENCY', {value: 'EUR', writable: false});
+  window.language = 'fr';
+  window.locale = 'fr_FR';
+  
+  // 2. Interface FR
+  document.documentElement.lang = 'fr';
+  if(window.i18n) window.i18n.lang = 'fr';
+  
+  // 3. Stripe EUR+FR intercept
+  const oldStripe = window.Stripe || window.paymentStripe;
+  window.Stripe = window.paymentStripe = function(config) {
+    return oldStripe({...config, currency: 'eur', locale: 'fr'});
+  };
+  
+  // 4. Console intercepteur EmailJS
+  const oldLog = console.log;
+  console.log = (...args) => {
+    oldLog(...args);
+    if(args[0]?.includes('buy.stripe.com')) {
+      args[0] += '?prefilled_currency=eur&locale=fr';
+    }
+  };
+  
+  // 5. calculPrixHB3D Excel
+  window.calculPrixHB3D = (poids, tempsMin) => {
+    const mat = poids * 0.02;
+    const mach = (tempsMin / 60) * 19.2;  
+    return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
+  };
+  
+  console.log("🚀 3DMetri HB3D EUR+FR chargé !");
+})();
+</script>
+
 
 
 </body>
