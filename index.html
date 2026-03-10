@@ -170,39 +170,54 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
-            <script>
-// === 3DMetri EUR + FR FORCE (CONTINU) ===
+           <script>
+// === 3DMetri HB3D ULTIMATE (USD CACHE + EUR VISIBLE) ===
 ( function() {
-  const forceEUR_FR = () => {
-    // Override agressif
-    window.currency = 'EUR';
-    Object.defineProperty(window, 'DEFAULT_CURRENCY', {value: 'EUR', writable: false});
-    window.language = 'fr'; 
-    window.locale = 'fr_FR';
-    document.documentElement.lang = 'fr';
-    
-    console.log("🔥 3DMetri HB3D EUR+FR FORCÉ !");
-  };
+  // 1. CSS CACHE USD IMMÉDIAT
+  const style = document.createElement('style');
+  style.textContent = `
+    /* CACHE TOUS USD 3DMetri */
+    *[class*="price"], *[class*="Price"], *[class*="usd"], *[class*="USD"],
+    *[class*="total"], .total-price, span:has($), [class*="currency"] {
+      display: none !important;
+    }
+  `;
+  document.head.appendChild(style);
   
-  // 1. AU CHARGEMENT
-  forceEUR_FR();
+  // 2. OVERLAY HB3D EUR VISIBLE
+  const overlay = document.createElement('div');
+  overlay.id = 'hb3d-price';
+  overlay.style.cssText = `
+    position: fixed !important; top: 20px !important; right: 20px !important;
+    background: linear-gradient(45deg, #28a745, #20c997) !important;
+    color: white !important; padding: 15px 20px !important;
+    border-radius: 12px !important; z-index: 999999 !important;
+    font-weight: 900 !important; font-size: 20px !important;
+    box-shadow: 0 8px 25px rgba(40,167,69,0.5) !important;
+    border: 3px solid white !important; text-align: center;
+  `;
+  overlay.innerHTML = `🚀 <strong>55.59€ TTC</strong><br><small>HB3D Lille</small>`;
+  document.body.appendChild(overlay);
   
-  // 2. À CHAQUE CHANGEMENT 3DMetri
-  const observer = new MutationObserver(forceEUR_FR);
-  observer.observe(document.body, {childList: true, subtree: true});
-  
-  // 3. TOUTES les 2s (garanti)
-  setInterval(forceEUR_FR, 2000);
-  
-  // 4. Prix Excel
+  // 3. Prix Excel
   window.calculPrixHB3D = (poids, tempsMin) => {
     const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
     return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
   };
   
-  console.log("🚀 3DMetri HB3D FORCE EUR+FR ACTIVÉ !");
+  // 4. Stripe intercepteur SAFE
+  const oldLog = console.log;
+  console.log = (...args) => {
+    if(args[0] && typeof args[0] === 'string' && args[0].includes('buy.stripe.com')) {
+      args[0] += '?prefilled_currency=eur&locale=fr';
+    }
+    oldLog(...args);
+  };
+  
+  console.log("🚀 3DMetri HB3D ULTIMATE chargé ! USD caché !");
 })();
 </script>
+
 
 
 </body>
