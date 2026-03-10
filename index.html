@@ -213,27 +213,34 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 <body>  
 
 <script>
-// === TRADUCTION 3DMetri HB3D (SAFE) ===
+// === TRADUCTION 3DMetri LIVE ===
 ( function() {
-  const trad = {
-    'To Receive Instant Quote': 'Recevoir Devis Instantané',
-    'Upload your 3D files': 'Uploadez vos fichiers 3D',
-    'Total': 'Total TTC'
-  };
-  
-  // UNE SEULE fois après 2s
-  setTimeout(() => {
-    Object.entries(trad).forEach(([en, fr]) => {
-      const els = document.querySelectorAll(`:contains("${en}")`);
-      els.forEach(el => {
-        if(el.textContent) el.textContent = el.textContent.replace(en, fr);
-      });
+  function traduire() {
+    // Titres EXACTS 3DMetri
+    const els = document.querySelectorAll('div.display-2');
+    els.forEach(el => {
+      if(el.textContent === 'To Receive Instant Quote') {
+        el.textContent = 'Recevoir Devis Instantané';
+      }
     });
-    console.log("✅ TRADUCTION HB3D OK !");
-  }, 2000);
+    
+    // Upload
+    const uploads = document.querySelectorAll('*');
+    uploads.forEach(el => {
+      if(el.textContent && el.textContent.includes('Upload your 3D files')) {
+        el.textContent = el.textContent.replace('Upload your 3D files', 'Uploadez vos fichiers 3D');
+      }
+    });
+  }
   
+  // Live toutes les 500ms
+  setInterval(traduire, 500);
+  traduire(); // Immédiat
+  
+  console.log("🚀 TRADUCTION LIVE ACTIVÉE !");
 })();
 </script>
+
 
   
 
