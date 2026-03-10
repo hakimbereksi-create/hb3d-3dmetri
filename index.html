@@ -209,43 +209,6 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 })();
 </script>
 
-</head>
-<body>  
-
-<script>
-// === TRADUCTION 3DMetri LIVE ===
-( function() {
-  function traduire() {
-    // Titres EXACTS 3DMetri
-    const els = document.querySelectorAll('div.display-2');
-    els.forEach(el => {
-      if(el.textContent === 'To Receive Instant Quote') {
-        el.textContent = 'Recevoir Devis Instantané';
-      }
-    });
-    
-    // Upload
-    const uploads = document.querySelectorAll('*');
-    uploads.forEach(el => {
-      if(el.textContent && el.textContent.includes('Upload your 3D files')) {
-        el.textContent = el.textContent.replace('Upload your 3D files', 'Uploadez vos fichiers 3D');
-      }
-    });
-  }
-  
-  // Live toutes les 500ms
-  setInterval(traduire, 500);
-  traduire(); // Immédiat
-  
-  console.log("🚀 TRADUCTION LIVE ACTIVÉE !");
-})();
-</script>
-
-
-  
-
-
-
 
 
 </body>
