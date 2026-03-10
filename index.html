@@ -171,41 +171,47 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
           <script>
-// === 3DMetri HB3D ULTIMATE v2 (CSS Ciblé) ===
+// === 3DMetri HB3D CSS ULTRA-CIBLÉ ===
 ( function() {
-  // 1. CSS CIBLÉ (SEUL USD)
+  // 1. CSS ULTRA-CIBLÉ (SEUL les $)
   const style = document.createElement('style');
   style.textContent = `
-    /* UNIQUEMENT texte "$" et "USD" */
-    *:contains("$"), *:contains("USD") { 
-      visibility: hidden !important; 
-      font-size: 0 !important;
+    /* Cible EXACT les prix USD 3DMetri */
+    .price, .total-price, .usd-price, [class*="price-"],
+    span:contains("$"), .amount, .currency-usd,
+    /* Prix spécifiques Capture 40 */
+    div:has-text("Total"), div:has-text("$11.13"), div:has-text("$311.13") {
+      visibility: hidden !important;
+      height: 0 !important; line-height: 0 !important; font-size: 0 !important;
     }
-    /* Garde boutons upload */
-    button, input[type="file"], [class*="upload"] {
-      display: block !important;
+    
+    /* PROTÈGE Upload + interface */
+    button, input[type="file"], .upload-btn, .upload-area,
+    h1, h2, h3, .title, "Upload" { 
+      display: block !important; visibility: visible !important; 
+      text-align: center !important; font-size: inherit !important;
     }
   `;
   document.head.appendChild(style);
   
-  // 2. Overlay HB3D EUR
+  // 2. Overlay HB3D EUR (optionnel)
   const overlay = document.createElement('div');
   overlay.id = 'hb3d-price';
   overlay.style.cssText = `
-    position:fixed;top:20px;right:20px;background:#28a745;color:white;
-    padding:15px 20px;border-radius:12px;z-index:999999;font-weight:900;
-    font-size:18px;box-shadow:0 8px 25px rgba(0,0,0,0.3);
+    position:fixed;top:20px;right:20px;z-index:999999;
+    background:#28a745;color:white;padding:12px 16px;border-radius:8px;
+    font-weight:700;font-size:16px;box-shadow:0 4px 12px rgba(0,0,0,0.3);
   `;
-  overlay.innerHTML = `🚀 <strong>55.59€ TTC</strong><br>HB3D Lille`;
+  overlay.innerHTML = `<strong>55.59€ TTC</strong><br><small>HB3D Lille</small>`;
   document.body.appendChild(overlay);
   
-  // 3. Prix Excel
+  // 3. Prix Excel + EmailJS SAFE
   window.calculPrixHB3D = (poids, tempsMin) => {
     const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
     return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
   };
   
-  console.log("🚀 3DMetri HB3D v2 - USD ciblé + Upload OK !");
+  console.log("🚀 3DMetri HB3D CSS ULTRA-CIBLÉ ACTIF !");
 })();
 </script>
 
