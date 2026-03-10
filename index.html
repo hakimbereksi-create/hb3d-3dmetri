@@ -171,48 +171,53 @@ if(msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
 console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
              
- <<script>
-// === 3DMetri HB3D FINAL (Console + EmailJS SAFE) ===
+<script>
+// === 3DMetri HB3D ULTIMATE (SAFE + EmailJS FIX) ===
 ( function() {
-  // 1. Prix Excel (PARFAIT)
+  // 1. CONSOLE SAFE (ANTI-RÉCUSION)
+  const oldLog = console.log;
+  let processing = false;
+  
+  console.log = function(...args) {
+    if (processing) return; // STOP récusion
+    
+    processing = true;
+    const msg = args[0];
+    
+    // 💰 STRIPE EUR
+    if (typeof msg === 'string' && msg.includes('buy.stripe.com')) {
+      console.log(`💳 STRIPE EUR: ${msg}?prefilled_currency=eur&locale=fr`);
+    }
+    
+    // 📧 EmailJS APRÈS "Mail sended"
+    if (msg === 'Mail sended') {
+      setTimeout(() => {
+        // Vérifie EmailJS + Service ID CORRECT
+        if (typeof emailjs !== 'undefined' && emailjs.send) {
+          emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+            to_email: 'hakim@hb3d.fr',
+            prix_eur: '55.59€ TTC',
+            client_email: document.querySelector('input[type="email"]')?.value || 'test@hb3d.fr'
+          }).then(() => {
+            console.log('🚀 EmailJS HB3D → 55.59€ OK !');
+          }).catch(err => {
+            console.log('❌ EmailJS config manquante - Dashboard EmailJS');
+          });
+        }
+      }, 1000);
+    }
+    
+    oldLog(...args);
+    processing = false;
+  };
+  
+  // 2. Prix Excel
   window.calculPrixHB3D = (poids, tempsMin) => {
     const mat = poids * 0.02; const mach = (tempsMin / 60) * 19.2;
     return ((mat + mach) * 1.1).toFixed(2) + '€ TTC';
   };
   
-  // 2. INTERCEPTEUR CONSOLE (ATTENTE EmailJS)
-  const oldLog = console.log;
-  console.log = function(...args) {
-    const msg = args[0];
-    
-    // 💰 CAPTURE STRIPE USD → EUR
-    if (msg && typeof msg === 'string' && msg.includes('buy.stripe.com')) {
-      console.log(`💳 STRIPE EUR: ${msg}?prefilled_currency=eur&locale=fr`);
-      return oldLog(...args);
-    }
-    
-    // 📧 ATTENTE "Mail sended" → EmailJS HB3D
-    if (msg === 'Mail sended') {
-      setTimeout(() => {
-        if (typeof emailjs !== 'undefined') {
-          emailjs.send('service_hb3d', 'template_hb3d', {
-            to_email: 'hakim@hb3d.fr',
-            prix_eur: '55.59€ TTC',
-            client_email: document.querySelector('input[type="email"]')?.value || 'client@hb3d.fr',
-            message: '3DMetri → STL + 55.59€ prêt !'
-          }).then(() => {
-            console.log('🚀 EmailJS HB3D → 55.59€ ENVOYÉ !');
-          }).catch(err => {
-            console.log('❌ EmailJS erreur:', err);
-          });
-        }
-      }, 500);
-    }
-    
-    return oldLog(...args);
-  };
-  
-  console.log("🚀 3DMetri HB3D FINAL - EmailJS SAFE !");
+  console.log("🚀 3DMetri HB3D ULTIMATE - SAFE !");
 })();
 </script>
 
