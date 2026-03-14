@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const key = `hb3d/${Date.now()}-${filename}`
     
     const command = new PutObjectCommand({
-      Bucket: 'hb3d-lille',
+      Bucket: 'hb3d-calculateur-3d-files',
       Key: key,
       ContentType: 'application/octet-stream',
       Metadata: { 
