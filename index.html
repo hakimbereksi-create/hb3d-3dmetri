@@ -208,7 +208,7 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 </script>
-      function doPost(e) {
+ function doPost(e) {
   try {
     // TON DOSSIER HB3D-STL
     const folderId = '1yk0ixQIajPy5mFiA7L2jOT_-orDF2CyU';
@@ -225,12 +225,14 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
     
     const folder = DriveApp.getFolderById(folderId);
     const file = folder.createFile(blob);
-    
+
+   
     // Lien public
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
     
     return ContentService
       .createTextOutput(JSON.stringify({ 
+        success: true,
         fileId: file.getId(),
         url: file.getUrl()
       }))
@@ -238,7 +240,10 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
       
   } catch(error) {
     return ContentService
-      .createTextOutput(JSON.stringify({ error: error.toString() }))
+      .createTextOutput(JSON.stringify({ 
+        success: false,
+        error: error.toString() 
+      }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
