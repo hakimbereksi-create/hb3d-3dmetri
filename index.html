@@ -208,83 +208,40 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 </script>
-        <script>
-    // Éléments DOM
-    const fileInput = document.getElementById('file-input');
-    const uploadZone = document.querySelector('.upload-zone');
-    const progress = document.querySelector('.progress');
-    const progressBar = document.getElementById('progress-bar');
-    const result = document.getElementById('result');
-    const driveLink = document.getElementById('drive-link');
+      function doPost(e) {
+  try {
+    // TON DOSSIER HB3D-STL
+    const folderId = '1yk0ixQIajPy5mFiA7L2jOT_-orDF2CyU';
     
-    // Drag & Drop
-    uploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadZone.classList.add('dragover');
-    });
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('dragover');
-    });
-    uploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadZone.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        if (files.length > 0) uploadToDrive(files[0]);
-    });
+    const bytes = e.parameter.bytes;
+    const mimeType = e.parameter.mimeType;
+    const filename = e.parameter.filename;
     
-    // Click upload
-    uploadZone.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) uploadToDrive(e.target.files[0]);
-    });
+    const blob = Utilities.newBlob(
+      Utilities.base64Decode(bytes), 
+      mimeType, 
+      filename
+    );
     
-    // 🚀 WORKFLOW COMPLET HB3D
-    async function uploadToDrive(file) {
-        if (!file.name.match(/\.(stl|obj)$/i)) {
-            alert('❌ STL/OBJ uniquement');
-            return;
-        }
-        if (file.size > 100 * 1024 * 1024) {
-            alert('❌ Max 100MB');
-            return;
-        }
-        
-        progress.style.display = 'block';
-        progressBar.style.width = '10%';
-        
-        // 1. Calcul volume
-        const volume = await calculateStlVolume(file);
-        progressBar.style.width = '50%';
-        document.getElementById('volume').textContent = volume + ' cm³';
-        
-        // 2. Upload Drive
-        const driveUrl = await realDriveUpload(file);
-        progressBar.style.width = '90%';
-        
-        // 3. Résultat
-        document.getElementById('price').textContent = '55€';
-        driveLink.href = driveUrl;
-        driveLink.textContent = '📎 STL sur Drive ✅';
-        
-        result.style.display = 'block';
-        progress.style.display = 'none';
-    }
+    const folder = DriveApp.getFolderById(folderId);
+    const file = folder.createFile(blob);
     
-    async function calculateStlVolume(file) {
-        return new Promise(resolve => {
-            setTimeout(() => resolve(1245 + Math.floor(Math.random() * 200)), 1500);
-        });
-    }
+    // Lien public
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
     
-    async function realDriveUpload(file) {
-        // Simu Drive pour test
-        return `https://drive.google.com/file/d/HB3D-${Date.now()}/view?usp=sharing`;
-    }
-    
-    function payStripe() {
-        alert('🚀 Stripe 55€ → Impression 3D lancée !');
-    }
-</script>
+    return ContentService
+      .createTextOutput(JSON.stringify({ 
+        fileId: file.getId(),
+        url: file.getUrl()
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch(error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ error: error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
 
 
 
