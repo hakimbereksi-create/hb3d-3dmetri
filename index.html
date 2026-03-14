@@ -208,6 +208,50 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 </script>
+             <script>
+// 🔴 NOUVEAU uploadFiles() - Override Vue.js automatique
+window.uploadFiles = async function(event) {
+  event.preventDefault()
+  const loading = document.getElementById("loading")
+  if (loading) loading.style.display = "block"
+  
+  try {
+    // 1. Presigned URL depuis API Vercel
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: files?.[0]?.name || 'test.stl',
+        email: document.getElementById("clientEmail")?.value || 'client@hb3d.fr'
+      })
+    })
+    
+    if (!res.ok) throw new Error('API KO')
+    const { uploadUrl, key } = await res.json()
+    
+    // 2. Upload DIRECT S3 (PAS via Vercel !)
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      body: files[0],
+      headers: { 'Content-Type': 'application/octet-stream' }
+    })
+    
+    // 3. SUCCÈS HB3D PRO !
+    if (loading) loading.style.display = "none"
+    const prix = Math.round((volume || 100) * 0.2)
+    alert(`✅ S3 UPLOAD: ${key}\n💰 DEVIS: ${prix}€\n📧 ${document.getElementById("clientEmail")?.value || 'contact@hb3d.fr'}`)
+    
+    // Bonus Stripe
+    window.open('https://buy.stripe.com/9AQdRMaXX00000abDG', '_blank')
+    
+  } catch (error) {
+    if (loading) loading.style.display = "none"
+    alert('❌ Upload échoué: ' + error.message)
+    console.error('Upload error:', error)
+  }
+}
+</script>
+
 
 
 
