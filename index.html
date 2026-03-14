@@ -8,9 +8,9 @@
       //VUE_APP_BASE_GET_SIGNED_URL:'*YOUR AWS LAMBDA FUNCTION URL HERE*',
       //VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL:'*YOUR AWS LAMBDA FUNCTION URL HERE*',
       
-      VUE_APP_BASE_SES_LAMBDA_URL:'https://4bnosx427q7rmgwklsekx2jeke0tfyob.lambda-url.us-east-1.on.aws',
-      VUE_APP_BASE_GET_SIGNED_URL:'https://gipeovznovgqn54pt2v6ght36a0tlxzq.lambda-url.us-east-1.on.aws',
-      VUE_APP_BASE_CREATE_STRIPE_PAYMENT_LINK_URL:'https://qi6xp5ajlaim7ic2dbjvuib63i0ktezz.lambda-url.us-east-1.on.aws',
+     VUE_APP_DRIVE_UPLOAD_URL:'https://script.google.com/macros/s/AKfycbycQh23pDorljim-bTHZ8q9BaeAb-nAzBdy2Tx9P490MbMPQ2OmyJ17jUKUekMIEWA9Fw/exec'
+
+
       
       LANG: "fr"
       
@@ -210,42 +210,19 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 </script>
  function doPost(e) {
   try {
-    // TON DOSSIER HB3D-STL
-    const folderId = '1yk0ixQIajPy5mFiA7L2jOT_-orDF2CyU';
-    
-    const bytes = e.parameter.bytes;
-    const mimeType = e.parameter.mimeType;
-    const filename = e.parameter.filename;
-    
-    const blob = Utilities.newBlob(
-      Utilities.base64Decode(bytes), 
-      mimeType, 
-      filename
-    );
-    
-    const folder = DriveApp.getFolderById(folderId);
-    const file = folder.createFile(blob);
-
-   
-    // Lien public
-    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    
-    return ContentService
-      .createTextOutput(JSON.stringify({ 
-        success: true,
-        fileId: file.getId(),
-        url: file.getUrl()
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
-  } catch(error) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ 
-        success: false,
-        error: error.toString() 
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+  async function realDriveUpload(file) {
+  const formData = new FormData();
+  formData.append('bytes', await fileToBase64(file));
+  formData.append('filename', file.name);
+  formData.append('mimeType', file.type || 'application/octet-stream');
+  
+  const response = await fetch('https://script.google.com/macros/s/AKfycbycQh23pDorljim-bTHZ8q9BaeAb-nAzBdy2Tx9P490MbMPQ2OmyJ17jUKUekMIEWA9Fw/exec', {
+    method: 'POST',
+    body: formData
+  });
+  
+  const data = await response.json();
+  return `https://drive.google.com/file/d/${data.fileId}/view?usp=sharing`;
 }
 
 
