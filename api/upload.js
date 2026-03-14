@@ -25,13 +25,10 @@ export default async function handler(req, res) {
     const key = `hb3d/${Date.now()}-${filename}`
     
     const command = new PutObjectCommand({
-      Bucket: 'hb3d-calculateur-3d-files',
+      Bucket: 'hb3d-stl-uploads',  // ✅ NOUVEAU BUCKET
       Key: key,
       ContentType: 'application/octet-stream',
-      Metadata: { 
-        email: email,
-        project: 'HB3D-Lille'
-      }
+      Metadata: { email, project: 'HB3D-Lille' }
     })
     
     const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
@@ -39,7 +36,7 @@ export default async function handler(req, res) {
     res.json({ 
       success: true, 
       uploadUrl: url, 
-      key: key 
+      key 
     })
     
   } catch (error) {
