@@ -207,98 +207,8 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
-</script>
-           
-<script> → INVISIBLE           
-async function realDriveUpload(file) {
-  try {
-    console.log('🚀 UPLOAD →', file.name);
-    
-    // REMPLACE par TON URL Lambda
-    const res = await fetch('https://HB3D-S3-Upload.TON_URL.lambda-url.eu-west-3.on.aws', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        mimetype: file.type || 'model/stl'
-      })
-    });
-    
-    const { uploadUrl, key } = await res.json();
-    console.log('✅ S3 URL:', key);
-    
-    await fetch(uploadUrl, { method: 'PUT', body: file });
-    const volumeResult = await getVolume(key);
-    
-    console.log('🚀 HB3D → 55.59€ TTC + STL capturé !', volumeResult);
-    return volumeResult;
-  } catch (error) {
-    console.error('❌ Upload failed:', error);
-  }
-}
 
-// DropZone global (remplace ancien)
-document.addEventListener('drop', async (e) => {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file?.name.toLowerCase().endsWith('.stl')) {
-    await realDriveUpload(file);
-  }
-});
-</script>
-             <script>
-// 🔥 HB3D S3 BACKUP - URL LAMBDA OFFICIELLE
-const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws';
-
-async function hb3dS3Backup(file) {
-  try {
-    console.log('🚀 HB3D S3 →', file.name);
-    
-    // 1. Demande URL S3 signée
-    const res = await fetch(HB3D_LAMBDA, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        filename: file.name,
-        mimetype: file.type || 'model/stl'
-      })
-    });
-    
-    const { uploadUrl, key } = await res.json();
-    console.log('✅ S3 KEY:', key);
-    
-    // 2. Upload DIRECT S3
-    await fetch(uploadUrl, { method: 'PUT', body: file });
-    
-    // 3. Volume (si getVolume existe)
-    if (typeof getVolume === 'function') {
-      const volume = await getVolume(key);
-      console.log('📏 Volume:', volume);
-    }
-    
-    console.log('🏆 BACKUP HB3D S3 = OK !', key);
-    alert('✅ STL sauvé HB3D S3 eu-west-3 !');
-    
-  } catch (error) {
-    console.error('❌ S3 Backup KO:', error);
-  }
-}
-
-// DropZone globale (sur toute la page)
-document.addEventListener('dragover', e => e.preventDefault());
-document.addEventListener('drop', async (e) => {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file && file.name.toLowerCase().endsWith('.stl')) {
-    await hb3dS3Backup(file);
-  } else {
-    alert('❌ Fichier STL requis !');
-  }
-});
-
-console.log('🚀 HB3D S3 Backup = ACTIF ! Drag STL anywhere!');
-</script>
-             <!-- 🔥 S3 HB3D BACKUP (bonus silencieux) -->
+<!-- 🔥 S3 HB3D BACKUP FINAL (1 SEUL script) -->
 <script>
 const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws';
 
@@ -314,21 +224,23 @@ async function backupS3HB3D(file) {
     await fetch(uploadUrl, { method: 'PUT', body: file });
     console.log('✅ S3 HB3D OK:', file.name);
   } catch(e) {
-    // Silencieux - 3DMetri principal continue
+    console.log('S3 bonus skipped');
   }
 }
 
-// BACKUP AUTOMATIQUE sur drop (3DMetri + bonus)
+// 1 SEUL listener drop (3DMetri + S3 bonus)
+document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', async(e) => {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
   if (file && file.name.toLowerCase().endsWith('.stl')) {
-    backupS3HB3D(file); // En parallèle
+    backupS3HB3D(file); // Silencieux
   }
 });
 
 console.log('🚀 S3 HB3D Backup = ACTIF !');
 </script>
+
 
 
 
