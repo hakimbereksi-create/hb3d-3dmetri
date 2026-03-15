@@ -208,70 +208,95 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 
-<script>
-const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws';
+<body>
+<form id="upload-form">
+  <input type="file" id="file-input" />
+  <progress id="upload-progress" value="0" max="100"></progress>
+  <p id="upload-status"></p>
+  <button type="submit">Uploader</button>
+</form>
 
-async function backupS3HB3D(file) {
-  console.log('🚀 S3 HB3D →', file.name);
-  try {
-    const res = await fetch(HB3D_LAMBDA, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({filename: file.name, mimetype: 'model/stl'})
-    });
-    const {uploadUrl} = await res.json();
-    await fetch(uploadUrl, {method: 'PUT', body: file});
-    console.log('✅ S3 HB3D OK:', file.name);
-  } catch(e) {
-    console.log('S3 bonus skipped');
-  }
-}
-
-// HOOK 3DMetri après "FICHIER capturé"
-const originalLog = console.log;
-console.log = (...args) => {
-  const msg = args[0];
-  if (msg && msg.includes('FICHIER capturé')) {
-    setTimeout(() => {
-      // Récupère fichier récent
-      const recentFile = Array.from(document.querySelectorAll('*'))
-        .filter(el => el.textContent.includes('stl'))[0]?.textContent;
-      console.log('📁 Fichier détecté:', recentFile);
-      
-      // Hook dropZone
-      const dropZones = document.querySelectorAll('.drop-zone, [class*="drop"], .upload-area');
-      dropZones.forEach(zone => {
-        if (!zone.dataset.hb3dBackup) {
-          zone.dataset.hb3dBackup = 'true';
-          zone.addEventListener('drop', e => {
-            setTimeout(() => {
-              const files = Array.from(e.dataTransfer.files);
-              files.filter(f => f.name.endsWith('.stl')).forEach(backupS3HB3D);
-            }, 100);
-          });
-          console.log('✅ 3DMetri HOOKED → S3 HB3D !');
-        }
-      });
-    }, 500);
-  }
-  originalLog(...args);
-};
-
-// Fallback global
-document.addEventListener('drop', e => {
-  e.stopPropagation();
-  const file = e.dataTransfer.files[0];
-  if (file?.name.toLowerCase().endsWith('.stl')) {
-    backupS3HB3D(file);
-  }
-}, true);
-
-console.log('🚀 S3 HB3D HOOK + Global = ACTIF !');
+       <script>
+const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws/';
+let uploadProgress = 0;
 </script>
+<script>
+async function uploadToS3(file) {
+  const fileName = encodeURIComponent(file.name);
+  const fileType = encodeURIComponent(file.type);
+  const response = await fetch(`${HB3D_LAMBDA}?filename=${fileName}&filetype=${fileType}`);
 
+  if (!response.ok) {
+    throw new Error('Erreur lors de la génération de l’URL signée');
+  }
 
+  const { uploadURL, key } = await response.json();
 
+  const upload = await fetch(uploadURL, {
+    method: 'PUT',
+    headers: { 'Content-Type': file.type },
+    body: file
+  });
 
+  if (!upload.ok) {
+    throw new Error('Erreur pendant l’upload S3');
+  }
+
+  return key;
+}
+</script>
+<script>
+document.getElementById('upload-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const fileInput = document.getElementById('file-input');
+  const file = fileInput.files[0];
+  const progressBar = document.getElementById('upload-progress');
+  const statusText = document.getElementById('upload-status');
+
+  if (!file) {
+    alert('Veuillez sélectionner un fichier avant de continuer.');
+    return;
+  }
+
+  try {
+    statusText.textContent = 'Envoi en cours...';
+    progressBar.value = 0;
+
+    const xhr = new XMLHttpRequest();
+    const fileName = encodeURIComponent(file.name);
+    const fileType = encodeURIComponent(file.type);
+
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        uploadProgress = Math.round((e.loaded / e.total) * 100);
+        progressBar.value = uploadProgress;
+        statusText.textContent = `Progression : ${uploadProgress}%`;
+      }
+    });
+
+    const response = await fetch(`${HB3D_LAMBDA}?filename=${fileName}&filetype=${fileType}`);
+    const { uploadURL, key } = await response.json();
+
+    xhr.open('PUT', uploadURL);
+    xhr.setRequestHeader('Content-Type', file.type);
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        statusText.textContent = 'Upload terminé avec succès ! ✅';
+        console.log('Clé S3 :', key);
+      } else {
+        statusText.textContent = 'Erreur pendant l’upload.';
+      }
+    };
+
+    xhr.send(file);
+  } catch (err) {
+    console.error(err);
+    statusText.textContent = 'Erreur lors de l’envoi du fichier.';
+  }
+});
+</script>
 
 
 </body>
