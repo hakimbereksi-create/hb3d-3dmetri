@@ -208,13 +208,59 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
   console.log("🚀 3DMetri HB3D → 55.59€ FIXE !");
 })();
 </script>
-             // ✅ APRÈS tes scripts existants
+            // ✅ APRÈS tes scripts existants
 async function realDriveUpload(file) {
-  const formData = new FormData();
-  formData.append('bytes
-
-
+  try {
+    console.log('🚀 UPLOAD →', file.name);
+    
+    // 1. Lambda S3 Upload URL
+    const res = await fetch('https://HB3D-S3-Upload.TA_URL.lambda-url.eu-west-3.on.aws', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        mimetype: file.type || 'model/stl'
+      })
+    });
+    
+    const { uploadUrl, key } = await res.json();
+    console.log('✅ S3 URL:', key);
+    
+    // 2. Upload DIRECT S3
+    await fetch(uploadUrl, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': file.type || 'model/stl' }
+    });
+    
+    // 3. Volume Lambda (ton code existant)
+    const volumeResult = await getVolume(key);
+    
+    console.log('🚀 HB3D → 55.59€ TTC + STL capturé !', volumeResult);
+    console.log('📧 Email MANUEL: [hakim@hb3d.fr](mailto:hakim@hb3d.fr) → 55.59€ prêt !');
+    
+    return volumeResult;
+  } catch (error) {
+    console.error('❌ Upload failed:', error);
+    throw error;
+  }
 }
+
+// 4. Remplace ton dropZone existant
+dropZone.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  processing = true;
+  
+  const file = e.dataTransfer.files[0];
+  try {
+    const result = await realDriveUpload(file);
+    showResult(result); // Ta fonction existante
+  } catch (error) {
+    console.error('Upload failed:', error);
+  } finally {
+    processing = false;
+  }
+});
 
 
 
