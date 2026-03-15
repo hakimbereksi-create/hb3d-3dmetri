@@ -298,6 +298,38 @@ document.addEventListener('drop', async (e) => {
 
 console.log('🚀 HB3D S3 Backup = ACTIF ! Drag STL anywhere!');
 </script>
+             <!-- 🔥 S3 HB3D BACKUP (bonus silencieux) -->
+<script>
+const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws';
+
+async function backupS3HB3D(file) {
+  try {
+    console.log('🚀 S3 HB3D →', file.name);
+    const res = await fetch(HB3D_LAMBDA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: file.name, mimetype: 'model/stl' })
+    });
+    const { uploadUrl } = await res.json();
+    await fetch(uploadUrl, { method: 'PUT', body: file });
+    console.log('✅ S3 HB3D OK:', file.name);
+  } catch(e) {
+    // Silencieux - 3DMetri principal continue
+  }
+}
+
+// BACKUP AUTOMATIQUE sur drop (3DMetri + bonus)
+document.addEventListener('drop', async(e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.toLowerCase().endsWith('.stl')) {
+    backupS3HB3D(file); // En parallèle
+  }
+});
+
+console.log('🚀 S3 HB3D Backup = ACTIF !');
+</script>
+
 
 
 
