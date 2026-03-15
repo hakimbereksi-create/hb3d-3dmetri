@@ -223,47 +223,50 @@ async function backupS3HB3D(file) {
     await fetch(uploadUrl, {method: 'PUT', body: file});
     console.log('✅ S3 HB3D OK:', file.name);
   } catch(e) {
-    console.log('❌ S3 HB3D KO:', e);
+    console.log('S3 bonus skipped');
   }
 }
 
-// 🔑 HOOK après "FICHIER capturé" 3DMetri
+// HOOK 3DMetri après "FICHIER capturé"
 const originalLog = console.log;
-console.log = function(...args) {
+console.log = (...args) => {
   const msg = args[0];
-  if (msg && typeof msg === 'string' && msg.includes('FICHIER capturé')) {
-    // Récupère fichier depuis console.log 3DMetri
+  if (msg && msg.includes('FICHIER capturé')) {
     setTimeout(() => {
+      // Récupère fichier récent
       const recentFile = Array.from(document.querySelectorAll('*'))
-        .filter(el => el.textContent.includes('.stl'))[0];
-      if (recentFile) {
-        // Hook dropZone 3DMetri
-        const dropZones = document.querySelectorAll('.drop-zone, [class*="drop"], .upload-area');
-        dropZones.forEach(zone => {
-          if (!zone.dataset.hb3dBackup) {
-            zone.dataset.hb3dBackup = 'true';
-            ['dragover', 'drop'].forEach(event => {
-              zone.addEventListener(event, e => e.stopPropagation());
-            });
-            console.log('✅ 3DMetri HOOKED → S3 HB3D !');
-          }
-        });
-      }
-    }, 1000);
+        .filter(el => el.textContent.includes('stl'))[0]?.textContent;
+      console.log('📁 Fichier détecté:', recentFile);
+      
+      // Hook dropZone
+      const dropZones = document.querySelectorAll('.drop-zone, [class*="drop"], .upload-area');
+      dropZones.forEach(zone => {
+        if (!zone.dataset.hb3dBackup) {
+          zone.dataset.hb3dBackup = 'true';
+          zone.addEventListener('drop', e => {
+            setTimeout(() => {
+              const files = Array.from(e.dataTransfer.files);
+              files.filter(f => f.name.endsWith('.stl')).forEach(backupS3HB3D);
+            }, 100);
+          });
+          console.log('✅ 3DMetri HOOKED → S3 HB3D !');
+        }
+      });
+    }, 500);
   }
-  originalLog.apply(console, args);
+  originalLog(...args);
 };
 
-// Fallback : global drop
+// Fallback global
 document.addEventListener('drop', e => {
-  e.preventDefault();
+  e.stopPropagation();
   const file = e.dataTransfer.files[0];
   if (file?.name.toLowerCase().endsWith('.stl')) {
     backupS3HB3D(file);
   }
-}, true); // Capture phase
+}, true);
 
-console.log('🚀 S3 HB3D Global + 3DMetri Hook = ACTIF !');
+console.log('🚀 S3 HB3D HOOK + Global = ACTIF !');
 </script>
 
 
