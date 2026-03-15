@@ -211,40 +211,23 @@ console.log("🚀 INTERCEPTEUR console.log 3DMetri = ACTIVÉ !");
 <script>
 const HB3D_LAMBDA = 'https://exi6suxzdul7qnhbqucsshifbu0xypqw.lambda-url.eu-west-3.on.aws';
 
-async function backupS3HB3D(file) {
-  try {
-    console.log('🚀 S3 HB3D →', file.name);
-    const res = await fetch(HB3D_LAMBDA, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({filename: file.name, mimetype: 'model/stl'})
-    });
-    const {uploadUrl} = await res.json();
-    await fetch(uploadUrl, {method: 'PUT', body: file});
-    console.log('✅ S3 HB3D OK:', file.name);
-  } catch(e) {
-    console.log('S3 bonus skipped');
-  }
-}
-
-// HOOK 3DMetri drop (EN PARALLÈLE)
-const observer = new MutationObserver(() => {
-  const dropZone = document.querySelector('.drop-zone, [class*="drop"], .upload-area');
-  if (dropZone && !dropZone.dataset.hb3dHooked) {
-    dropZone.dataset.hb3dHooked = 'true';
-    dropZone.addEventListener('drop', (e) => {
-      setTimeout(() => {
-        const files = Array.from(e.dataTransfer.files);
-        files.filter(f => f.name.endsWith('.stl')).forEach(backupS3HB3D);
-      }, 100);
-    });
-    console.log('✅ 3DMetri dropZone HOOKED !');
-  }
-});
-observer.observe(document.body, {childList: true, subtree: true});
-
-console.log('🚀 S3 HB3D = HOOKED 3DMetri !');
-</script>
+// HOOK après 3DMetri upload détecté
+setInterval(() => {
+  if (console.log.toString().includes('object_key')) {
+    const dropZones = document.querySelectorAll('.drop-zone, [class*="drop"], .upload-area');
+    dropZones.forEach(zone => {
+      if (!zone.dataset.s3Hooked) {
+        zone.dataset.s3Hooked = 'true';
+        zone.addEventListener('drop', async(e) => {
+          setTimeout(async() => {
+            const files = Array.from(e.dataTransfer.files);
+            for(const file of files.filter(f => f.name.endsWith('.stl'))) {
+              try {
+                console.log('🚀 S3 HB3D →', file.name);
+                const res = await fetch(HB3D_LAMBDA, {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body:
 
 
 
